@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3566954-15db-468d-82d7-9b60a8957e26" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ColorType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="d3566954-15db-468d-82d7-9b60a8957e26" name="Default" comment="lesson 1-9 done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cat.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Cat.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Loader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +38,7 @@
   <component name="PropertiesComponent">
     <property name="FullScreen" value="false" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="C:/Уроки по JAVA/3 модуль/Домашнее задание 3/Задание 9/Cat" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -153,6 +148,14 @@
       <option name="presentableId" value="Default" />
       <updated>1440574635454</updated>
     </task>
+    <task id="LOCAL-00001" summary="lesson 1-9 done">
+      <created>1587496739456</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587496739456</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,11 +177,23 @@
       <collection />
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="lesson 1-9 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="lesson 1-9 done" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="238" y="274" key="FileChooserDialogImpl" timestamp="1587496100685">
+    <state x="119" y="114" key="CommitChangelistDialog2" timestamp="1587496738254">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="238" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587496100685" />
+    <state x="119" y="114" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587496738254" />
+    <state x="238" y="274" key="FileChooserDialogImpl" timestamp="1587497095870">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="238" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587497095870" />
+    <state x="158" y="426" key="Vcs.Push.Dialog.v2" timestamp="1587496853628">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="158" y="426" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587496853628" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

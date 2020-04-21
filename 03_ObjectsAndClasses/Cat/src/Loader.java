@@ -1,6 +1,11 @@
 
 public class Loader
 {
+    private static Cat getKitten() {
+        Cat kitten = new Cat(1100);
+        return kitten;
+
+    }
     public static void main(String[] args)
     {
         Cat cat = new Cat();
