@@ -4,12 +4,22 @@ public class Main
     {
         Container container = new Container();
         container.count += 7843;
+        char ch = '9';
+
+
+        int n = Character.getNumericValue(ch);
+        System.out.println(n);
+
+
 
     }
 
-    public Integer sumDigits(Integer number)
-    {
+    public static Integer sumDigits(Integer number){
         //@TODO: write code here
-        return 0;
+        String integerString = number.toString();
+        Integer n = Integer.parseInt(integerString);
+        Integer sum = n;
+
+        return n;
     }
 }
