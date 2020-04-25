@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6cc50df0-6122-4fee-b082-0ff8f72dabed" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/src/Cat.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/src/Cat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/src/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat/src/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../M4" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1atSzEMM0xFJdoD3S4HVSlcQMDA" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551865119735" />
-    <property name="last_opened_file_path" value="C:/Уроки по JAVA/M4/1/IntegerExperiments" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../03_ObjectsAndClasses/Cat" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -23,11 +44,60 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6cc50df0-6122-4fee-b082-0ff8f72dabed" name="Default Changelist" comment="" />
+      <created>1587553657088</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587553657088</updated>
+    </task>
+    <task id="LOCAL-00001" summary="lesson 4-1 done">
+      <created>1587553763646</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587553763646</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="lesson 4-1 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="lesson 4-1 done" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1587553697646">
+    <state x="529" y="113" key="CommitChangelistDialog2" timestamp="1587553762362">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587553697646" />
+    <state x="529" y="113" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587553762362" />
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1587661911844">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587661911844" />
+    <state width="1860" height="272" key="GridCell.Tab.0.bottom" timestamp="1587825367816">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="272" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587825367816" />
+    <state width="1860" height="272" key="GridCell.Tab.0.center" timestamp="1587825367816">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="272" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587825367816" />
+    <state width="1860" height="272" key="GridCell.Tab.0.left" timestamp="1587825367816">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="272" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587825367816" />
+    <state width="1860" height="272" key="GridCell.Tab.0.right" timestamp="1587825367816">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="272" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587825367816" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1587553801332">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587553801332" />
     <state x="655" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1587553660184">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -1,4 +1,3 @@
-public class Container
-{
+public class Container {
     public int count;
 }
