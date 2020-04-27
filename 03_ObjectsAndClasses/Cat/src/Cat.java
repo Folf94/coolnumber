@@ -7,8 +7,6 @@ public class Cat {
     private double maxWeight;
 
     private double eat;
-    // private double peePee;
-
     private static int count;
     private boolean isAlive;
 
@@ -16,30 +14,25 @@ public class Cat {
     public static final int MAX_WEIGHT = 9000;
     public static final int MIN_WEIGHT = 1000;
 
+    private ColorType colorType;
 
-    private String color;
-
-
-    public void setColor(String color) {
-        this.color = color;
+    public ColorType getColorType() {
+        return colorType;
     }
 
-    public String getColor() {
-        return color;
+    public void setColorType(ColorType colorType) {
+        this.colorType = colorType;
     }
 
-
-    public Cat(Cat other){
+    public Cat(Cat other) {
         this.weight = other.weight;
         this.originWeight = other.originWeight;
-        this.maxWeight = other.maxWeight;
-        this.minWeight = other.minWeight;
-
+        this.colorType = other.colorType;
     }
-    public Cat copy(){
+
+    public Cat copy() {
         return new Cat(this);
     }
-
 
     public Cat() {
         weight = 1500.0 + 3000.0 * Math.random();
@@ -48,19 +41,12 @@ public class Cat {
         maxWeight = 9000.0;
         count++;
         isAlive();
-        getAmountOfEatenFood();
-
-
     }
 
-    public void getAmountOfEatenFood () {
-        double sum = 0.0;
-        feed(eat);
-        sum += eat;
-       // System.out.println("Кошка съела " + sum);
-
-
+    public Double getAmountOfEatenFood() {
+        return eat;
     }
+
 
     public Cat(int weight) {
 
@@ -71,7 +57,6 @@ public class Cat {
         this.weight = weight;
     }
 
-
     public void isAlive() {
         if (weight > minWeight && weight < maxWeight)
             isAlive = true;
@@ -80,8 +65,6 @@ public class Cat {
             isAlive = false;
             count--;
         }
-
-
     }
 
     public static int getCount() {
@@ -105,9 +88,7 @@ public class Cat {
         if (isAlive)
             weight = weight + amount;
         else isAlive();
-        eat = amount;
-
-
+        eat += amount;
     }
 
     public void drink(Double amount) {
@@ -122,7 +103,7 @@ public class Cat {
         return weight;
     }
 
-    public String getStatus(String dead) {
+    public String getStatus() {
         if (weight < minWeight) {
             return "Dead";
         } else if (weight > maxWeight) {
@@ -133,6 +114,5 @@ public class Cat {
             return "Playing";
         }
     }
-
 
 }
