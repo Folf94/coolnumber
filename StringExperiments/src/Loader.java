@@ -1,6 +1,21 @@
 import java.util.Scanner;
 
 public class Loader {
+
+    public static void main(String[] args) {
+
+        String text = "Вася заработал 5000 рублей, Петя - 7563 рубля, а Маша - 30000 рублей";
+        System.out.println(text);
+        System.out.println("++++++++++++++++++++++++++++++++++");
+        Text.sumOfDigits(text);
+        System.out.println("++++++++++++++++++++++++++++++++++");
+        Text.extractFullName();
+        System.out.println("++++++++++++++++++++++++++++++++++");
+        Text.collatingTelephoneNumber();
+        System.out.println("++++++++++++++++++++++++++++++++++");
+        Text.splittingText(largeText);
+    }
+
     private static String largeText = "Meet my family. There are five of us – my parents, my elder brother, my baby sister and me.  " +
             "First, meet my mum and dad, Jane and Michael. My mum enjoys reading and my dad enjoys playing " +
             "chess with my brother Ken. My mum is slim and rather tall. She has long red hair and big brown eyes. " +
@@ -58,17 +73,5 @@ public class Loader {
         }
     }
 
-    public static void main(String[] args) {
 
-        String text = "Вася заработал 5000 рублей, Петя - 7563 рубля, а Маша - 30000 рублей";
-        System.out.println(text);
-        System.out.println("++++++++++++++++++++++++++++++++++");
-        Text.sumOfDigits(text);
-        System.out.println("++++++++++++++++++++++++++++++++++");
-        Text.extractFullName();
-        System.out.println("++++++++++++++++++++++++++++++++++");
-        Text.collatingTelephoneNumber();
-        System.out.println("++++++++++++++++++++++++++++++++++");
-        Text.splittingText(largeText);
-    }
 }
