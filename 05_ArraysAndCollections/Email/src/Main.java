@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 public class Main {
     private static final String ACTION_MESSAGE = "Если вам нужно добавить email - введите 1.\nЕсли вам нужно вывести список email - введите 2.\nДля выходы из программы - введите 0.";
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-   private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX);
+    private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX);
+
     public static void main(String[] args) {
         Email.inputEmail();
 
