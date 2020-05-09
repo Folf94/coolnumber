@@ -12,7 +12,7 @@ public class Dr {
         Date date = new Date();
         Date me = calendar.getTime();
         int i = 0;
-        while (date.compareTo(me) > 0){
+        while (date.compareTo(me) > 0) {
             System.out.println(i + dateFormat.format(me));
             calendar.add(Calendar.YEAR, 1);
             me = calendar.getTime();
