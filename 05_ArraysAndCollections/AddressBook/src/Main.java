@@ -2,49 +2,51 @@ import java.util.*;
 
 public class Main {
 
-    private static final String MESSAGE = "Введите ваше имя.";
+    private static final String MESSAGE = "Введите ваше име или номер телефона";
+    private static final String REGEX = "\\d+";
 
     public static void main(String[] args) {
         AddressBook.setNameOrTelephone();
-
     }
 
     public static class AddressBook {
-
         public static void setNameOrTelephone() {
-            Map<String, Long> addressBook = new TreeMap<>();
-            Map<String, Integer> nameBook = new TreeMap<>();
-            Map<Long, Integer> numberBook = new TreeMap<>();
+            Map<String, String> addressBook = new TreeMap<>();
+            Scanner scanner = new Scanner(System.in);
+            String inputData;
 
             for (; ; ) {
-                Scanner scanner = new Scanner(System.in);
                 System.out.println(MESSAGE);
-                Long number = null;
-                String name = scanner.nextLine().trim().replaceAll("[^0-9],", "");
-                if (name.equals("LIST")) {
+                String number = "";
+                inputData = scanner.nextLine();
+                if (inputData.matches(REGEX)) {
+                    number = inputData.trim();
+                }
+                if (inputData.equals("LIST")) {
                     printMap(addressBook);
-                    System.out.println(MESSAGE);
-                    continue;
                 }
-                nameBook.put(name, nameBook.get(name) + 1);
-                if (nameBook.containsKey(name)) {
-                    System.out.println("Введите номер телефона");
-                    number = scanner.nextLong();
-                    numberBook.put(number, numberBook.get(number) + 1);
+                if (addressBook.containsValue(number)){
+                    System.out.println("Ваш номер телефона уже зарегестрирован, введите имя");
+                    inputData = scanner.nextLine().trim().replaceAll("[^a-zA-Zа-яА-я]", "");
+                    if (addressBook.containsKey(inputData)){
+                        System.out.println("Вы уже зарегестрированы\n");
+                        System.out.println("Ваше имя: " + inputData + " Номер телефона: " + number);
+                    }
                 }
-                if (nameBook.containsKey(name) && numberBook.containsKey(number)) {
-                    System.out.println("Вы уже зарегестрированы");
-                } else {
-                    addressBook.put(nameBook.keySet(name), numberBook.keySet(number));
+                if (addressBook.containsKey(inputData)) {
+                    System.out.println("Данное имя уже зарегестрировано, введите номер телефона");
+                    number = scanner.nextLine().trim().replaceAll("[^\\d]", "");
+                    if (addressBook.containsValue(number)) {
+                        System.out.println("Вы уже зарегестрированы\n");
+                        System.out.println("Ваше имя: " + inputData + " Номер телефона: " + number);
+                    }
                 }
-
+                addressBook.put(inputData, number);
             }
-
-
-            public static void printMap (Map < String, Integer > map){
-                for (String key : map.keySet()) {
-                    System.out.println(key + " => " + map.get(key));
-                }
+        }
+        public static void printMap(Map<String, String> addressBook) {
+            for (String s : addressBook.keySet()) {
+                System.out.println("Ваше имя: " + s + " Номер телефона: " + addressBook.get(s));
             }
         }
     }
