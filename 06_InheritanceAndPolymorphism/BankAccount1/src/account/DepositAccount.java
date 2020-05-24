@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DepositAccount extends Account {
-    private static Date monthOfDeposit;
+    private  Date monthOfDeposit;
 
     public DepositAccount() {
     }
