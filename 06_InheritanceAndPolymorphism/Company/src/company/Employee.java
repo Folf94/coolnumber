@@ -1,8 +1,7 @@
 package company;
 
-public interface Employee {
-     double getMonthSalary();
 
-      int getTopSalaryStaff(int count);
-      int getLowestSalaryStaff(int count);
+public interface Employee  {
+      public  double getMonthSalary();
+
 }

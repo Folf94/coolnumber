@@ -1,49 +1,28 @@
 package company;
 
-import java.util.HashSet;
 
+import java.util.ArrayList;
 
 public class Company {
     private static float income;
-    private static int staff;
+    ArrayList<Manager> managers = new ArrayList<>();
+    ArrayList<TopManager> topManagers = new ArrayList<>();
+    ArrayList<Operator> operators = new ArrayList<>();
 
-    HashSet<Manager> managers = new HashSet<>();
-    HashSet<TopManager> topManagers = new HashSet<>();
-    HashSet<Operator> operators = new HashSet<>();
-
-    public static double getStaff() {
-        return staff;
+    public void hire( double salary) {
+       Manager manager = new Manager(salary);
+       managers.add(manager);
     }
 
-    public void hire(Manager manager) {
-        managers.add(new Manager(10000.0));
-
+    public void getStaff() {
+        for (Manager manager : managers) {
+            System.out.println(manager);
+        }
     }
-
-    public void hire(Operator operator) {
-        operators.add(new Operator(5000.0));
-    }
-
-    public void hire(TopManager topManager) {
-        topManagers.add(new TopManager(15000.0));
-    }
-
-
-    public void fire(Manager manager) {
-        managers.remove(new Manager(10000.0));
-    }
-
-    public void hireAll() {
-
-
-    }
-
-    public static double getIncome() {
+    public static float getIncome() {
         return income;
     }
-
-    public static void setIncome(float income) {
+    public void setIncome(float income) {
         Company.income += income;
     }
-
 }

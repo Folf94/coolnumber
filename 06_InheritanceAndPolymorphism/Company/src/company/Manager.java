@@ -1,28 +1,21 @@
 package company;
 
-public class Manager extends Company implements Employee{
-    private static double salary;
 
-    public Manager (double salary){
-        Manager.salary = salary + (Company.getIncome() * 0.05);
+
+public class Manager  implements Employee {
+    private  double salary;
+
+
+    public Manager(double salary) {
+        this.salary = salary;
     }
 
-    public static void setSalary(double salary) {
-        Manager.salary = salary + (Company.getIncome() * 0.05) ;
-    }
-
-    @Override
-    public double getMonthSalary() {
-        return salary ;
-    }
-
-    @Override
-    public int getTopSalaryStaff(int count) {
-        return 0;
+    public  void setSalary(double salary) {
+        this.salary += salary;
     }
 
     @Override
-    public int getLowestSalaryStaff(int count) {
-        return 0;
+    public  double getMonthSalary() {
+        return salary + (Company.getIncome() * 0.005);
     }
 }
