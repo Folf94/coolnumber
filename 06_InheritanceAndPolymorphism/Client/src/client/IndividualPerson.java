@@ -1,7 +1,7 @@
 package client;
 
 public class IndividualPerson extends Client {
-    private static double account;
+    private  double account;
 
     @Override
     public double getAccount() {
@@ -11,7 +11,7 @@ public class IndividualPerson extends Client {
 
     @Override
     public void setAccount(double account) {
-        IndividualPerson.account += account;
+        this.account += account;
         System.out.println("Вы пополнели счет физического лица на: " + account);
     }
 
@@ -24,7 +24,7 @@ public class IndividualPerson extends Client {
 
     @Override
     public double getMoney(double account) {
-        IndividualPerson.account -= account;
+        this.account -= account;
         System.out.println("Вы сняли со счета физического лица: " + account);
         return account;
     }
