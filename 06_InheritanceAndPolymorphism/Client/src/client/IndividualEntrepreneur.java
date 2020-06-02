@@ -20,7 +20,7 @@ public class IndividualEntrepreneur extends Client {
             System.out.println("Вы пополнели счет индивидуального предпринимателя на: " + account + " комиссия составила: " + (account * MAX_PERCENT));
         } else {
             this.account += (account - ((account * MIN_PERCENT)));
-            System.out.println("Вы пополнели счет индивидуального предпринимателя на: " + account + " комиссия составила: " + ((account  * MIN_PERCENT)));
+            System.out.println("Вы пополнели счет индивидуального предпринимателя на: " + account + " комиссия составила: " + ((account * MIN_PERCENT)));
         }
     }
 
@@ -33,10 +33,9 @@ public class IndividualEntrepreneur extends Client {
 
     @Override
     public void getMoney(double account) {
-        if (account > getAccount()){
+        if (account > getAccount()) {
             System.out.println("Недостаточно средств для снятия");
-        }
-        else {
+        } else {
             this.account -= account;
             System.out.println("Вы сняли со счета индивидуального предпринимателя: " + account);
         }
@@ -44,7 +43,7 @@ public class IndividualEntrepreneur extends Client {
 
     @Override
     public void getInfo() {
-        System.out.println(NAME_OF_ACCOUNT + " \n"+ " Баланс составляет: "+ getBalance() + "\n" + " Пополнение с комиссией 1%, если сумма меньше 1000 рублей "+
+        System.out.println(NAME_OF_ACCOUNT + " \n" + " Баланс составляет: " + getBalance() + "\n" + " Пополнение с комиссией 1%, если сумма меньше 1000 рублей " +
                 "пополнение с комиссией 0,5% если сумма больше либо равна 1000 рублей." + "\n Снятие средств без коммиссии.");
     }
 }

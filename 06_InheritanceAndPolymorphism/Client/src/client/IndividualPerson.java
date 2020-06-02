@@ -25,10 +25,9 @@ public class IndividualPerson extends Client {
 
     @Override
     public void getMoney(double account) {
-        if (account > getAccount()){
+        if (account > getAccount()) {
             System.out.println("Недостаточно средств для снятия");
-        }
-        else {
+        } else {
             this.account -= account;
             System.out.println("Вы сняли со счета физического лица: " + account);
         }
@@ -36,6 +35,6 @@ public class IndividualPerson extends Client {
 
     @Override
     public void getInfo() {
-        System.out.println(NAME_OF_ACCOUNT + " \n"+ " Баланс составляет: "+ getBalance() + "\n" + " Пополнение cxtnf без комиссии." + "\n Снятие средств без комиссии.");
+        System.out.println(NAME_OF_ACCOUNT + " \n" + " Баланс составляет: " + getBalance() + "\n" + " Пополнение счета без комиссии." + "\n Снятие средств без комиссии.");
     }
 }
