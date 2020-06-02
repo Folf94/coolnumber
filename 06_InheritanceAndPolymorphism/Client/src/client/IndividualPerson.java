@@ -1,7 +1,8 @@
 package client;
 
 public class IndividualPerson extends Client {
-    private  double account;
+    private double account;
+    private static final String NAME_OF_ACCOUNT = "Cчет физического лица ";
 
     @Override
     public double getAccount() {
@@ -23,9 +24,18 @@ public class IndividualPerson extends Client {
     }
 
     @Override
-    public double getMoney(double account) {
-        this.account -= account;
-        System.out.println("Вы сняли со счета физического лица: " + account);
-        return account;
+    public void getMoney(double account) {
+        if (account > getAccount()){
+            System.out.println("Недостаточно средств для снятия");
+        }
+        else {
+            this.account -= account;
+            System.out.println("Вы сняли со счета физического лица: " + account);
+        }
+    }
+
+    @Override
+    public void getInfo() {
+        System.out.println(NAME_OF_ACCOUNT + " \n"+ " Баланс составляет: "+ getBalance() + "\n" + " Пополнение cxtnf без комиссии." + "\n Снятие средств без комиссии.");
     }
 }

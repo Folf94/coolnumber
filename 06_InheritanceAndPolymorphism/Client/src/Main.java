@@ -10,6 +10,7 @@ public class Main {
         individualPerson.getBalance();
         individualPerson.getMoney(1586.51);
         individualPerson.getBalance();
+        individualPerson.getInfo();
         System.out.println("++++++++++++++++++++++++++++++++++++++++");
         JuridicalPerson juridicalPerson = new JuridicalPerson();
         juridicalPerson.setAccount(16168585.0);
@@ -17,6 +18,7 @@ public class Main {
         juridicalPerson.getBalance();
         juridicalPerson.getMoney(151655461.5);
         juridicalPerson.getBalance();
+        juridicalPerson.getInfo();
         System.out.println("+++++++++++++++++++++++++++++++++++++++++");
         IndividualEntrepreneur individualEntrepreneur = new IndividualEntrepreneur();
         individualEntrepreneur.setAccount(511556.0);
@@ -24,6 +26,7 @@ public class Main {
         individualEntrepreneur.getBalance();
         individualEntrepreneur.getMoney(561561.156);
         individualEntrepreneur.getBalance();
+        individualEntrepreneur.getInfo();
 
     }
 }
