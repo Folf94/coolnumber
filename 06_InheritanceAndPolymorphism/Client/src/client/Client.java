@@ -1,16 +1,25 @@
 package client;
 
 public abstract class Client {
-    private double account;
+     double account;
 
-    public abstract double getAccount();
-
-    public  void setAccount(double account){
+    public double getAccount(){
+        System.out.println("Ваш баланс: " + this.account);
+        return this.account;
     }
 
-    public abstract double getBalance();
+    public  void setAccount(double account){
+       this.account += account;
+        System.out.println("Вы пополнили счет на: "+ account);
+    }
 
-    public abstract void getMoney(double account);
-
+    public  void getMoney(double account) {
+        if (account > getAccount()) {
+            System.out.println("Недостаточно средств для снятия");
+        } else {
+            this.account -= account;
+            System.out.println("Вы сняли со счета: " + account);
+        }
+    }
     public abstract void getInfo();
 }
