@@ -12,13 +12,13 @@ public class Main {
         System.out.println("++++++++++++++++++++++++++++++++++++++++");
         JuridicalPerson juridicalPerson = new JuridicalPerson();
         juridicalPerson.setAccount(16168585.0);
-        juridicalPerson.getMoney(151655461.5);
+        juridicalPerson.getMoney(1655461.5);
         juridicalPerson.getAccount();
         juridicalPerson.getInfo();
         System.out.println("+++++++++++++++++++++++++++++++++++++++++");
         IndividualEntrepreneur individualEntrepreneur = new IndividualEntrepreneur();
         individualEntrepreneur.setAccount(511556.0);
-        individualEntrepreneur.getMoney(561561.156);
+        individualEntrepreneur.getMoney(361530.156);
         individualEntrepreneur.getAccount();
         individualEntrepreneur.getInfo();
 

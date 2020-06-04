@@ -3,9 +3,10 @@ package client;
 public class JuridicalPerson extends Client {
     private static final double MAX_PERCENT = 0.01;
     private static final String NAME_OF_ACCOUNT = "Счет юридического лица ";
-
+    private double account;
     @Override
     public void getMoney(double account) {
+        this.account = this.getAccount();
         if (account > getAccount()) {
             System.out.println("Недостаточно средств для снятия");
         } else {

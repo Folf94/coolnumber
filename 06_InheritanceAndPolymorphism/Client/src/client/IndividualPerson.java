@@ -5,6 +5,6 @@ public class IndividualPerson extends Client {
 
     @Override
     public void getInfo() {
-        System.out.println(NAME_OF_ACCOUNT + " \n" + " Баланс составляет: " + this.account + "\n" + " Пополнение счета без комиссии." + "\n Снятие средств без комиссии.");
+        System.out.println(NAME_OF_ACCOUNT + " \n" + " Баланс составляет: " + getAccount() + "\n" + " Пополнение счета без комиссии." + "\n Снятие средств без комиссии.");
     }
 }

@@ -1,7 +1,7 @@
 package client;
 
 public abstract class Client {
-     double account;
+    private double account;
 
     public double getAccount(){
         System.out.println("Ваш баланс: " + this.account);
