@@ -2,7 +2,7 @@ package company;
 
 
 
-public class Manager  implements Employee {
+public class Manager extends Company  implements Employee {
     private  double salary;
 
 

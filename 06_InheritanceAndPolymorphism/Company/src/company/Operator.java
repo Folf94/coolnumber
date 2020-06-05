@@ -1,6 +1,6 @@
 package company;
 
-public class Operator extends Company implements Employee {
+public class Operator  implements Employee {
     private  double salary;
 
     public Operator (double salary){

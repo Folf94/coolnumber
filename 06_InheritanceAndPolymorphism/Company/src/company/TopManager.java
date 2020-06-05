@@ -1,6 +1,6 @@
 package company;
 
-public class TopManager extends Company implements Employee {
+public class TopManager  implements Employee {
     private  double salary;
 
     public TopManager (double salary){

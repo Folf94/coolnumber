@@ -1,7 +1,7 @@
 package company;
 
 
-public interface Employee  {
+public interface Employee {
       double getMonthSalary();
 
 }
