@@ -11,6 +11,9 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayList<Employee> staff = loadStaffFromFile();
+        staff.sort(Comparator.comparing(Employee::getSalary).thenComparing(Employee::getName));
+
+        /*
         staff.sort((o1, o2) -> {
             if (o1.getSalary().compareTo(o2.getSalary()) == 0) {
                 o1.getName().compareTo(o2.getName());
@@ -18,6 +21,9 @@ public class Main {
             }
             return o1.getSalary().compareTo(o2.getSalary());
         });
+
+         */
+
 
         for (Employee employee : staff) {
             System.out.println(employee);
