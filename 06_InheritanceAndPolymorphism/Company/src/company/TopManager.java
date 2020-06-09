@@ -1,20 +1,22 @@
 package company;
 
-public class TopManager  implements Employee {
-    private  double salary;
+import static company.Company.*;
 
-    public TopManager (double salary){
+public class TopManager  implements Employee {
+    private  int salary;
+
+    public TopManager (int salary){
         this.salary = salary;
     }
 
-    public  void setSalary(double salary) {
+    public  void setSalary(int salary) {
         this.salary += salary;
     }
 
     @Override
-    public double getMonthSalary() {
+    public int getMonthSalary() {
         if (Company.getIncome() > 10000000){
-            this.salary = salary + (salary * 1.5);
+            this.salary = (int) (salary + (salary * 1.5));
         }
         return salary;
     }

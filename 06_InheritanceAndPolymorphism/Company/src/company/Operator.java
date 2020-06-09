@@ -1,18 +1,18 @@
 package company;
 
 public class Operator  implements Employee {
-    private  double salary;
+    private  int salary;
 
-    public Operator (double salary){
+    public Operator (int salary){
         this.salary = salary;
     }
 
-    public  void setSalary(double salary) {
+    public  void setSalary(int salary) {
         this.salary = salary;
     }
 
     @Override
-    public double getMonthSalary() {
+    public int getMonthSalary() {
         return salary;
     }
 
