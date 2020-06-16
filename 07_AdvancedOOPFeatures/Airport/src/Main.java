@@ -1,27 +1,20 @@
 import com.skillbox.airport.Airport;
 import com.skillbox.airport.Terminal;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Stream;
-
+import java.util.Calendar;
+import java.util.Collection;
 
 public class Main {
     public static void main(String[] args) {
         Airport airport = Airport.getInstance();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR , 2);
-
-
-       airport.getTerminals().stream()
-                .map(Terminal::getFlights)
-                .flatMap(Collection::stream)
-                .flatMap(flight ->
-         Stream.of(flight.getDate()))
-                //.filter(date -> date < calendar)
-                .forEach(System.out::println);
-
-
+        calendar.add(Calendar.HOUR, 2);
+        airport.getTerminals().stream().map(Terminal::getFlights).flatMap(Collection::stream).filter(flight -> {
+            Calendar date = Calendar.getInstance();
+            Calendar prasentTime = Calendar.getInstance();
+            date.setTime(flight.getDate());
+            return date.before(calendar) && date.after(prasentTime);
+        }).forEach(flight -> System.out.println(flight.getDate()));
     }
+
 }
