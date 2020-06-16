@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class Company {
     private int income;
     List<Employee> list = new ArrayList<>();
@@ -13,26 +12,24 @@ public class Company {
         list.addAll(arrayList);
     }
 
-    public void getTopSalaryStaff(int count) {
+    public List<Employee> getTopSalaryStaff(int count) {
         list.sort(Comparator.comparing(Employee::getMonthSalary).reversed());
-        if (count <= list.size()) {
-            System.out.println("Наибольшие " + count + " ЗП:");
-            for (int i = 0; i < count; i++) {
-                System.out.println(list.get(i).getMonthSalary() + " руб");
-            }
-        } else
-            System.out.println("Кол-во сотрудников меньше введенного значения.");
+        count = Math.min(count, list.size());
+        System.out.println("Наибольшие " + count + " ЗП:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(list.get(i).getMonthSalary() + " руб");
+        }
+        return list.subList(0, count);
     }
 
-    public void getLowestSalaryStaff(int count) {
+    public List<Employee> getLowestSalaryStaff(int count) {
         list.sort(Comparator.comparing(Employee::getMonthSalary));
-        if (count <= list.size()) {
-            System.out.println("Наименьшие " + count + " ЗП:");
-            for (int i = 0; i < count; i++) {
-                System.out.println(list.get(i).getMonthSalary() + " руб");
-            }
-        } else
-            System.out.println("Кол-во сотрудников меньше введенного значения.");
+        count = Math.min(count, list.size());
+        System.out.println("Наименьшие " + count + " ЗП:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(list.get(i).getMonthSalary() + " руб");
+        }
+        return list.subList(0, count);
     }
 
     public void hire(Employee employee) {

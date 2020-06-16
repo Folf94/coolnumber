@@ -29,7 +29,7 @@ public class Main {
         company.getTopSalaryStaff(3);
         System.out.println("+++++++++++++++++++++++++++++++");
         company.fire(150);
-        company.getLowestSalaryStaff(1);
+        company.getLowestSalaryStaff(200);
         System.out.println("+++++++++++++++++++++++++++++++");
         company.getTopSalaryStaff(1);
         System.out.println("+++++++++++++++++++++++++++++++");
