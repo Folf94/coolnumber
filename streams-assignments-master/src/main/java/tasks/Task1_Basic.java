@@ -1,7 +1,9 @@
 package tasks;
 
+import java.util.Arrays;
 import java.util.Collection;
-
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 class Task1_Basic {
@@ -55,9 +57,9 @@ class Task1_Basic {
      * - Collectors.joining()
      */
     static String replaceWordsOnLength(String str) {
-        /*str.split("");
-        str.chars();*/
+        return Arrays.stream(str.split("\\s+"))
+                .map(wordLength -> Integer.toString(wordLength.length()))
+                .collect(Collectors.joining(" "));
 
-        return str;
     }
 }

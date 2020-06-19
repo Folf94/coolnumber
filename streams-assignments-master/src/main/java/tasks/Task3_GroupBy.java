@@ -2,6 +2,7 @@ package tasks;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Задания на groupingBy - очень полезная функция в Stream.
@@ -60,9 +61,7 @@ public class Task3_GroupBy {
      * </pre>
      */
     public static Map<String, List<Employee>> groupByCompaniesAsListUppercase(Collection<Employee> employees) {
-        return employees.stream().collect(Collectors.groupingBy(Employee::getCompany,
-                Collectors.mapping(String::toUpperCase, Collectors.toList()))); //toUpperCase
-
+        return employees.stream().collect(Collectors.groupingBy(employee -> employee.getCompany().toUpperCase()));
     }
 
 

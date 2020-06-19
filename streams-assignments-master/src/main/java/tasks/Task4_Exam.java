@@ -1,5 +1,6 @@
 package tasks;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,19 +37,20 @@ public class Task4_Exam {
      * @param weight
      * @return
      */
-    public static Object getTypeByWeight(int weight) {
-       if (weight <= 2000){
-           return TruckType.Pickup;
-       }
-       if (weight <= 12000){
-           return TruckType.SmallBoxTruck;
-       }
-       if (weight <= 20000){
-           return TruckType.SemiTrailer;
-       }
-       else {
-           throw new WeightTooHighException();
-       }
+    public static TruckType getTypeByWeight(int weight) {
+
+        if (weight <= 2000){
+            return TruckType.Pickup;
+        }
+        if (weight <= 12000){
+            return TruckType.SmallBoxTruck;
+        }
+        if (weight <= 20000){
+            return TruckType.SemiTrailer;
+        }
+        else {
+            throw new WeightTooHighException();
+        }
     }
 
 
@@ -74,7 +76,7 @@ public class Task4_Exam {
      * @return
      */
     public static Map<TruckType, List<Truck>> groupTrucksByType(List<Truck> trucks) {
-       return trucks.stream().collect(TruckType::canHandleWeight());
+       return trucks.stream().collect(Collectors.groupingBy(truck -> getTypeByWeight(truck.maxWeightKg)));
     }
 
     /**
@@ -99,10 +101,8 @@ public class Task4_Exam {
      * @return
      */
     public static Map<TruckType, Long> countTrucksByType(List<Truck> trucks) {
-       return trucks.stream().collect(Collectors.groupingBy(truck -> truck.maxWeightKg)),
-                Collectors.counting());
-        throw new PleaseDeleteMeAndImplement();
-        return  null;
+        return trucks.stream().collect(Collectors.groupingBy(truck ->  getTypeByWeight(truck.maxWeightKg),
+                Collectors.counting()));
     }
 
     /**
