@@ -39,18 +39,19 @@ public class Task4_Exam {
      */
     public static TruckType getTypeByWeight(int weight) {
 
-        if (weight <= 2000){
-            return TruckType.Pickup;
+        for (TruckType truckType : TruckType.values()) {
+
+            if(weight <= 2000) return TruckType.Pickup;
+            if (weight <= 12000) return TruckType.SmallBoxTruck;
+            if(weight <= 20000) return  TruckType.SemiTrailer;
+            else  throw new WeightTooHighException();
         }
-        if (weight <= 12000){
-            return TruckType.SmallBoxTruck;
+        TruckType[] truckTypes = TruckType.values();
+        for (int i = 0; i < truckTypes.length; i++) {
+            TruckType truckType = truckTypes[i];
         }
-        if (weight <= 20000){
-            return TruckType.SemiTrailer;
-        }
-        else {
-            throw new WeightTooHighException();
-        }
+
+        return null;
     }
 
 
