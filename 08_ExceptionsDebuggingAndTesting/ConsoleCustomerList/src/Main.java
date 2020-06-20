@@ -1,5 +1,10 @@
+
+import exceptions.IllegalArgumentException;
+import exceptions.IllegalMailException;
+import exceptions.IllegalNumberException;
+
 import java.util.Scanner;
-import java.util.regex.Pattern;
+
 
 public class Main
 {
@@ -42,7 +47,7 @@ public class Main
                 }
             }
             catch
-            (Exception ex){
+            (IllegalNumberException | IllegalMailException | IllegalArgumentException ex){
                 System.out.println(ex.getMessage());
             }
         }

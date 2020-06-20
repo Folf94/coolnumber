@@ -1,3 +1,6 @@
+import exceptions.IllegalMailException;
+import exceptions.IllegalNumberException;
+import exceptions.IllegalArgumentException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -12,6 +15,7 @@ public class CustomerStorage
     {
         storage = new HashMap<>();
     }
+
     public static boolean isValidEmail(String email) {
         if (email == null)
             return false;
@@ -28,14 +32,15 @@ public class CustomerStorage
 
         String[] components = data.split("\\s+");
         if (components.length !=4){
-            throw new IllegalArgumentException("Wrong format. Correct format: \n" + "Василий Петров vasily.petrov@gmail.com +79215637722");
-        }
-        if (!isValidEmail(components[3])){
             throw new IllegalArgumentException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
                     ".petrov@gmail.com +79215637722");
         }
+        if (!isValidEmail(components[3])){
+            throw new IllegalMailException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
+                    ".petrov@gmail.com +79215637722");
+        }
         if(!isValidNumber(components[2])){
-            throw new IllegalArgumentException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
+            throw new IllegalNumberException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
                     ".petrov@gmail.com +79215637722");
         }
         String name = components[0] + " " + components[1];
