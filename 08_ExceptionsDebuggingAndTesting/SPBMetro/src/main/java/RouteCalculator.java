@@ -30,6 +30,7 @@ public class RouteCalculator
         }
 
         route = getRouteWithTwoConnections(from, to);
+
         return route;
     }
 
@@ -42,6 +43,7 @@ public class RouteCalculator
             Station station = route.get(i);
             if(i > 0)
             {
+
                 duration += previousStation.getLine().equals(station.getLine()) ?
                     interStationDuration : interConnectionDuration;
             }
