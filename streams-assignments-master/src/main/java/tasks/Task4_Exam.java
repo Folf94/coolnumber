@@ -1,9 +1,6 @@
 package tasks;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,19 +36,7 @@ public class Task4_Exam {
      */
     public static TruckType getTypeByWeight(int weight) {
 
-        for (TruckType truckType : TruckType.values()) {
-
-            if(weight <= 2000) return TruckType.Pickup;
-            if (weight <= 12000) return TruckType.SmallBoxTruck;
-            if(weight <= 20000) return  TruckType.SemiTrailer;
-            else  throw new WeightTooHighException();
-        }
-        TruckType[] truckTypes = TruckType.values();
-        for (int i = 0; i < truckTypes.length; i++) {
-            TruckType truckType = truckTypes[i];
-        }
-
-        return null;
+        return Arrays.stream(TruckType.values()).sorted(Comparator.comparingInt(it -> it.maxLoad)).filter(it -> it.maxLoad >= weight).findFirst().orElseThrow(WeightTooHighException::new);
     }
 
 
