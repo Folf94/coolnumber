@@ -1,64 +1,69 @@
+import exceptions.IllegalArgumentException;
 import exceptions.IllegalMailException;
 import exceptions.IllegalNumberException;
-import exceptions.IllegalArgumentException;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-public class CustomerStorage
-{
+public class CustomerStorage {
     private HashMap<String, Customer> storage;
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-    private static final Pattern PATTERN_EMAIL = Pattern.compile(EMAIL_REGEX);
-    private static final String NUMBER_REGEX = "\"^7\\\\d{10}$\"" ;
-    private static final Pattern PATTERN_NUMBER = Pattern.compile(NUMBER_REGEX);
-    public CustomerStorage()
-    {
+
+
+    public CustomerStorage() {
         storage = new HashMap<>();
     }
 
-    public static boolean isValidEmail(String email) {
-        if (email == null)
-            return false;
-        return PATTERN_EMAIL.matcher(email).matches();
-    }
-    public static boolean isValidNumber(String number) {
-        if (number == null)
-            return false;
-        return PATTERN_NUMBER.matcher(number).matches();
+
+    public static boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
     }
 
-        public void addCustomer(String data)
-    {
+    public static boolean isValidNumber(String number) {
+        String numberRegex = "^\\+[0-9]{2,3}+-[0-9]{10}$";
+        Pattern numberPattern = Pattern.compile(numberRegex);
+        if (number == null) {
+            return false;
+        }
+        return numberPattern.matcher(number).matches();
+    }
+
+    public void addCustomer(String data) {
 
         String[] components = data.split("\\s+");
-        if (components.length !=4){
+        if (components.length != 4) {
             throw new IllegalArgumentException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
                     ".petrov@gmail.com +79215637722");
         }
-        if (!isValidEmail(components[3])){
-            throw new IllegalMailException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
-                    ".petrov@gmail.com +79215637722");
+        if (!isValidEmailAddress(components[2])) {
+            throw new IllegalMailException("Wrong format. Correct format: \n" + "Василий Петров vasily" + ".petrov" +
+                    "@gmail.com +79215637722");
         }
-        if(!isValidNumber(components[2])){
-            throw new IllegalNumberException("Wrong format. Correct format: \n" + "Василий Петров vasily" +
-                    ".petrov@gmail.com +79215637722");
+        if (isValidNumber(components[3])) {
+            throw new IllegalNumberException("Wrong format. Correct format: \n" + "Василий Петров vasily" + ".petrov" +
+                    "@gmail.com +79215637722");
         }
         String name = components[0] + " " + components[1];
         storage.put(name, new Customer(name, components[3], components[2]));
     }
 
-    public void listCustomers()
-    {
+    public void listCustomers() {
         storage.values().forEach(System.out::println);
     }
 
-    public void removeCustomer(String name)
-    {
+    public void removeCustomer(String name) {
         storage.remove(name);
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         return storage.size();
     }
 }
