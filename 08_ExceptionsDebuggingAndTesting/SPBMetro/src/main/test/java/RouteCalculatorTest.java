@@ -2,71 +2,70 @@ import core.Line;
 import core.Station;
 import junit.framework.TestCase;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RouteCalculatorTest extends TestCase {
-    List<Station> route = new ArrayList<>();
+
     StationIndex stationIndexTest = new StationIndex();
-   // RouteCalculator routeCalculator = new RouteCalculator(stationIndexTest);
-    List<Station> connections = new ArrayList<>();
+    RouteCalculator calculator = new RouteCalculator(stationIndexTest);
+    List<Station> noTransfer;
+    List<Station> oneTransfer;
+    List<Station> twoTransfer;
+    Station oneOne;
+    Station oneThree;
+    Station twoOne;
+    Station threeOne;
 
     @Override
     protected void setUp() throws Exception {
+        Line line1 = new Line(1, "Первая");
+        Line line2 = new Line(2, "Вторая");
+        Line line3 = new Line(3, "Третья");
+        oneOne = new Station("Выхино", line1);
+        Station oneTwo = new Station("Жулебино", line1);
+        oneThree = new Station("Полежаевская", line1);
+        twoOne = new Station("Косино", line2);
+        Station twoTwo = new Station("Котельники", line2);
+        Station twoThree = new Station("Ухтомская", line2);
+        threeOne = new Station("Кузьминки", line3);
+        Station threeTwo = new Station("Рязанский проспект", line3);
+        Station threeThree = new Station("Текстильщики", line3);
 
+        Stream.of(line1, line2, line3).forEach(stationIndexTest::addLine);
+        Stream.of(oneOne, oneTwo, oneThree, twoOne, twoTwo, twoThree, threeOne, threeTwo, threeThree)
+                .peek(s -> s.getLine().addStation(s)).forEach(stationIndexTest::addStation);
+        stationIndexTest.addConnection(Stream.of(oneTwo, twoTwo).collect(Collectors.toList()));
+        stationIndexTest.addConnection(Stream.of(twoThree, threeThree).collect(Collectors.toList()));
 
-         Line line1 = new Line(1,"Первая");
-         Line line2 = new Line (2, "Вторая");
-         Line line3 = new Line (3, "Третья");
+        stationIndexTest.getConnectedStations(oneTwo);
+        stationIndexTest.getConnectedStations(twoThree);
 
-        stationIndexTest.addLine(new Line(1,"Первая"));
-        stationIndexTest.addLine(new Line(2,"Вторая"));
-        stationIndexTest.addLine(new Line(3,"Третья"));
+        noTransfer = Stream.of(oneOne, oneTwo, oneThree).collect(Collectors.toList());
+        oneTransfer = Stream.of(oneOne, oneTwo, twoTwo, twoOne).collect(Collectors.toList());
+        twoTransfer =
+                Stream.of(oneOne, oneTwo, twoTwo, twoThree, threeThree, threeTwo, threeOne).collect(Collectors.toList());
 
-        line1.addStation(new Station("Выхино", line1));
-        line1.addStation(new Station("Жулебино", line1));
-        line2.addStation(new Station("Косино", line2));
-        line2.addStation(new Station("Котельники", line2));
-        line3.addStation(new Station("Кузьминки", line3));
-        line3.addStation(new Station("Рязанский проспект", line3));
-
-        connections.add(new Station("Выхино", line1));
-        connections.add(new Station("Косино", line2));
-        stationIndexTest.addConnection(connections);
-        connections.clear();
-        connections.add(new Station("Котельники", line2));
-        connections.add(new Station("Кузьминки", line3));
-
-        route.add(new Station("Выхино", line1));
-        route.add(new Station("Жулебино", line1));
-        route.add(new Station("Косино", line2));
-        route.add(new Station("Котельники", line2));
-        route.add(new Station("Кузьминки", line3));
-        route.add(new Station("Рязанский проспект", line3));
-
-        stationIndexTest.addStation(new Station("Выхино",stationIndexTest.getLine(1)));
-        stationIndexTest.addStation(new Station("Жулебино",stationIndexTest.getLine(1)));
-        stationIndexTest.addStation(new Station("Косино",stationIndexTest.getLine(2)));
-        stationIndexTest.addStation(new Station("Котельники",stationIndexTest.getLine(2)));
-        stationIndexTest.addStation(new Station("Кузьминки",stationIndexTest.getLine(3)));
-        stationIndexTest.addStation(new Station("Рязанский проспект",stationIndexTest.getLine(3)));
-
-    }
-    @Override
-    protected void tearDown() throws Exception {
 
     }
 
     public void testGetShortestRoute() {
+        List<Station> expectedNoTransfer = noTransfer;
+        List<Station> expectedOneTransfer = oneTransfer;
+        List<Station> expectedTwoTransfer = twoTransfer;
 
+        List<Station> actualNoTransfer = calculator.getShortestRoute(oneOne, oneThree);
+        List<Station> actualOneTransfer = calculator.getShortestRoute(oneOne, twoOne);
+        List<Station> actualTwoTransfer = calculator.getShortestRoute(oneOne, threeOne);
 
-
+        assertEquals(actualNoTransfer, expectedNoTransfer);
+        assertEquals(actualOneTransfer, expectedOneTransfer);
+        assertEquals(actualTwoTransfer, expectedTwoTransfer);
     }
 
     public void testCalculateDuration() {
-        double actual = RouteCalculator.calculateDuration(route);
+        double actual = RouteCalculator.calculateDuration(twoTransfer);
         double expected = 17;
         assertEquals(expected, actual);
     }

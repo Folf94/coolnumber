@@ -36,7 +36,7 @@ public class StationIndex
             }
             TreeSet<Station> connectedStations = connections.get(station);
             connectedStations.addAll(stations.stream()
-                .filter(s -> !s.equals(station)).collect(Collectors.toList()));
+                    .filter(s -> !s.equals(station)).collect(Collectors.toList()));
         }
     }
 
