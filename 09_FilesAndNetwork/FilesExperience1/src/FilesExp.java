@@ -1,29 +1,27 @@
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 
-public class Files {
+public class FilesExp {
     public static final int MAGIC_NUM = 1024;
 
-
     public static void main(String[] args) {
+
+
         try {
             for (; ; ) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Введите путь до папки:");
                 String address = scanner.nextLine();
                 File file = new File(address);
-                folderSize(file);
-                if (folderSize(file) < MAGIC_NUM)
-                    System.out.println("Объем папки - " + file + " " + folderSize(file) + " байт");
-                if (folderSize(file) < MAGIC_NUM * MAGIC_NUM)
-                    System.out.println("Объем папки - " + file + " " + folderSize(file) / MAGIC_NUM + " Kбайт");
-                if (folderSize(file) < MAGIC_NUM * MAGIC_NUM * MAGIC_NUM)
-                    System.out.println("Объем папки - " + file + " " + folderSize(file) / (MAGIC_NUM * MAGIC_NUM) +
-                            " Mбайт");
-                else
-                    System.out.println("Объем папки - " + file + " " + folderSize(file) / (MAGIC_NUM * MAGIC_NUM * MAGIC_NUM) +
-                            " Гбайт");
+                System.out.println("Метод: folderSizeByFiles,"+" объем папки: " + address + " составляет " + readableFileSize(folderSizeByFiles(file)));
+                System.out.println("Метод: folderSize,"+" объем папки: " + address + " составляет " + readableFileSize(folderSize(file)));
+                System.out.println("Метод: folderSizeByCycle,"+" объем папки: " + address + " составляет " + readableFileSize(folderSizeByCycle(file)));
 
             }
         } catch (Exception ex) {
@@ -31,9 +29,8 @@ public class Files {
         }
     }
 
-    public static float folderSize(File directory) {
-        float length = 0.0f;
-
+    public static long folderSize(File directory) {
+        long length = 0;
         if (directory.isFile())
             length += directory.length();
         else {
@@ -44,10 +41,39 @@ public class Files {
                     length += folderSize(file);
             }
         }
-
         return length;
     }
+
+    public static long folderSizeByCycle(File directory) {
+        long length = 0;
+        String[] s = directory.list();
+        for (int i = 0; i < s.length; i++) {
+            File file2 = new File(directory.getAbsolutePath() + "/" + s[i]);
+            if (file2.isFile())
+                length += file2.length();
+            else
+                length += folderSize(file2);
+        }
+        return length;
+    }
+
+    public static long folderSizeByFiles(File directory) throws IOException {
+
+        Path folder = Paths.get(String.valueOf(directory));
+        return Files.walk(folder).filter(p -> p.toFile().isFile()).mapToLong(p -> p.toFile().length()).sum();
+
+    }
+
+    public static String readableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(MAGIC_NUM));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(MAGIC_NUM, digitGroups)) + " " + units[digitGroups];
+    }
 }
+
 
 
 
