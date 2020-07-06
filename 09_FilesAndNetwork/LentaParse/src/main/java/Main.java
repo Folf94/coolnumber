@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<String> images = new ArrayList<>();
         Document document = Jsoup.connect("https://lenta.ru/").get();
-        Elements img = document.select("img");
+        Elements img = document.select("img[src~=(?i)\\.(png|jpe?g)]");
         for (Element element : img) {
             String image = element.attr("abs:src");
             images.add(image);
