@@ -5,7 +5,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -16,7 +15,7 @@ import java.util.*;
 
 
 public class Main {
-private static final String URL = "https://www.moscowmap.ru/metro.html#lines";
+    private static final String URL = "https://www.moscowmap.ru/metro.html#lines";
     private static final String DATA_FILE = "data/metro.json";
     public static Map<String, Object> metro = new HashMap<>();
     public static Map<String, List<String>> stations = new HashMap<>();
@@ -24,34 +23,31 @@ private static final String URL = "https://www.moscowmap.ru/metro.html#lines";
     public static Set<Parser> lineSet = new HashSet<>();
 
 
+
     public static void main(String[] args) throws IOException, ParseException {
 
         Document document = Jsoup.connect(URL).maxBodySize(0).get();
         Elements stationsByLine = document.select("div.js-metro-stations");
+        Elements stationsFromURL = document.select("span.js-metro-line");
 
-        /*stationsByLine.forEach(e -> lineNumbers.add(e.select("div.js-metro-stations").attr("data-line")));
-        lineNumbers.forEach(line -> {
-            List<String> stationList = new ArrayList<>();
 
-            stationsByLine.parallelStream().forEach(e -> stationList.add(stationsByLine.select("p").text()));
-            stations.put(line, stationList);
-            stationsByLine.parallelStream().forEach(e -> lineSet.add(new Parser(line,
-                    e.select("span.js-metro-line").text(),
-                    stationList.size())));
-        });*/
-        for (int i = 0; i < stationsByLine.size(); i++) {
-            Element e = stationsByLine.get(i);
-            lineNumbers.add(e.select("div.js-metro-stations").attr("data-line"));
-            int finalI = i;
+
+            stationsByLine.forEach(e -> lineNumbers.add(e.select("div.js-metro-stations").attr("data-line")));
             lineNumbers.forEach(line -> {
-                        List<String> stationList = new ArrayList<>();
-            stationList.add(stationsByLine.select("p").text());
-            stations.put(line, stationList);
-                        lineSet.add(new Parser(line,
-                                e.select("span.js-metro-line").get(finalI).text(),
-                                stationList.size()));
+                List<String> stationList = new ArrayList<>();
+                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).forEach(e -> {
+
+                 stationList.add(e.select("p").text()); //.replaceAll("[\\d\\.]", ""));
+                });
+                stations.put(line, stationList);
+
+                stationsFromURL.forEach(name ->{
+                    stationsByLine.parallelStream().forEach(e -> lineSet.add(new Parser(line,name.text()
+                            , stationList.size(),stationsByLine.select("span.t-icon-metroln").attr("title"))));
+
             });
-        }
+            });
+
 
         metro.put("stations", stations);
         metro.put("lines", lineSet);
@@ -61,19 +57,20 @@ private static final String URL = "https://www.moscowmap.ru/metro.html#lines";
 
         print();
     }
+
+
     public static void print() throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject jsonData = (JSONObject) parser.parse(getJsonFile());
         JSONObject stationsObject = (JSONObject) jsonData.get("stations");
 
-        stationsObject.keySet().stream().sorted(Comparator.comparingInt(s -> Integer.parseInt(((String)s)
-                .replaceAll("[^\\d]", "")))).forEach(lineNumberObject ->
-        {
+        stationsObject.keySet().forEach(lineNumberObject -> {
             JSONArray stationsArray = (JSONArray) stationsObject.get(lineNumberObject);
-            int stationsCount = stationsArray.size();
-            System.out.println("Номер линиии " + lineNumberObject + " - колличество станций : " + stationsCount);
+            //int stationsCount = stationsArray.size();
+            System.out.println("Номер линиии " + lineNumberObject + " - колличество станций : " + stationsArray.size());
         });
     }
+
     public static String getJsonFile() {
         StringBuilder builder = new StringBuilder();
         try {
