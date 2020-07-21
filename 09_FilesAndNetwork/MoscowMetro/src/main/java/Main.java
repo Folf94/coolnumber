@@ -5,6 +5,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 
 public class Main {
@@ -20,7 +22,7 @@ public class Main {
     public static Map<String, Object> metro = new HashMap<>();
     public static Map<String, List<String>> stations = new HashMap<>();
     public static Set<String> lineNumbers = new HashSet<>();
-    public static Set<Parser> lineSet = new HashSet<>();
+    public static Set<CreateLines> lineSet = new HashSet<>();
 
 
 
@@ -31,26 +33,28 @@ public class Main {
         Elements stationsFromURL = document.select("span.js-metro-line");
 
 
+/*List<String> names = new ArrayList<>();
+stationsFromURL.forEach(e -> names.add(e.select("span.js-metro-line").text()));
+
+for (String name : names){
+    System.out.println(name);
+}*/
 
             stationsByLine.forEach(e -> lineNumbers.add(e.select("div.js-metro-stations").attr("data-line")));
             lineNumbers.forEach(line -> {
                 List<String> stationList = new ArrayList<>();
-                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).forEach(e -> {
-
-                 stationList.add(e.select("p").text()); //.replaceAll("[\\d\\.]", ""));
-                });
+                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).forEach(e ->
+                    e.select("p").stream().map(Element::text).forEach(stationList::add));
                 stations.put(line, stationList);
-
-                stationsFromURL.forEach(name ->{
-                    stationsByLine.parallelStream().forEach(e -> lineSet.add(new Parser(line,name.text()
-                            , stationList.size(),stationsByLine.select("span.t-icon-metroln").attr("title"))));
-
-            });
+               List<String> names = new ArrayList<>();
+                stationsFromURL.forEach(e -> names.add(e.select("span.js-metro-line").text()));
+                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).findFirst().ifPresent((e -> lineSet.add(new CreateLines(line, null, stationList.size()))));
             });
 
 
         metro.put("stations", stations);
         metro.put("lines", lineSet);
+
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(DATA_FILE), metro);
@@ -66,7 +70,6 @@ public class Main {
 
         stationsObject.keySet().forEach(lineNumberObject -> {
             JSONArray stationsArray = (JSONArray) stationsObject.get(lineNumberObject);
-            //int stationsCount = stationsArray.size();
             System.out.println("Номер линиии " + lineNumberObject + " - колличество станций : " + stationsArray.size());
         });
     }
