@@ -1,7 +1,6 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
 
 
 @Data
@@ -10,4 +9,5 @@ public class CreateLines {
     private String number;
     private String name;
     private int stationsCount;
+
 }

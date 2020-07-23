@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -21,49 +21,63 @@ public class Main {
     private static final String DATA_FILE = "data/metro.json";
     public static Map<String, Object> metro = new HashMap<>();
     public static Map<String, List<String>> stations = new HashMap<>();
-    public static Set<String> lineNumbers = new HashSet<>();
+    public static Set<Connections> connections = new HashSet<>();
     public static Set<CreateLines> lineSet = new HashSet<>();
-
-
+    public static Set<String> lineNumbers = new HashSet<>();
+    public static List<String> stationsList;
+    public static String lineNum;
+    public static Map<String, List<String>> connects = new HashMap<>();
 
     public static void main(String[] args) throws IOException, ParseException {
 
         Document document = Jsoup.connect(URL).maxBodySize(0).get();
         Elements stationsByLine = document.select("div.js-metro-stations");
         Elements stationsFromURL = document.select("span.js-metro-line");
+        Elements connect = document.select("span.t-icon-metroln");
 
+        for (int i = 0; i < stationsByLine.size(); i++) {
+            Element e = stationsByLine.get(i);
+            lineNum = e.attr("data-line");
+            stationsList = e.select("p").stream().map(Element::text).collect(Collectors.toList());
+            connects.put(stationsList.get(i), connect.get(i).getAllElements().eachAttr("title"));
+            stations.put(lineNum, stationsList);
+            lineSet.add(new CreateLines(lineNum, stationsFromURL.get(i).text(), stationsList.size()));
+            /*for (int j = 0; j < connect.size(); j++) {
+                List<String> conn = connect.get(j).getAllElements().eachAttr("title");
+                if (!conn.isEmpty()) {
+                    connections.add(new Connections(lineNum, stationsList.toString(),
+                            conn.toString().replaceAll("]", "").replaceAll("\\[", "")));
+                }
+            }*/
+        }
 
-/*List<String> names = new ArrayList<>();
-stationsFromURL.forEach(e -> names.add(e.select("span.js-metro-line").text()));
+           /* for (int j = 0; j < connect.size(); j++) {
+                List<String> conn = connect.get(j).getAllElements().eachAttr("title");
+                if (!conn.isEmpty()) {
+                    connections.add(new Connections(lineNum, stationsList.get(j),
+                            conn.toString().replaceAll("]", "").replaceAll("\\[",
+                            "")));
 
-for (String name : names){
-    System.out.println(name);
-}*/
+            }
+        }*/
 
-            stationsByLine.forEach(e -> lineNumbers.add(e.select("div.js-metro-stations").attr("data-line")));
-            lineNumbers.forEach(line -> {
-                List<String> stationList = new ArrayList<>();
-                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).forEach(e ->
-                    e.select("p").stream().map(Element::text).forEach(stationList::add));
-                stations.put(line, stationList);
-               List<String> names = new ArrayList<>();
-                stationsFromURL.forEach(e -> names.add(e.select("span.js-metro-line").text()));
-                stationsByLine.parallelStream().filter(e -> e.select("div.js-metro-stations").attr("data-line").equals(line)).findFirst().ifPresent((e -> lineSet.add(new CreateLines(line, null, stationList.size()))));
-            });
-
-
-        metro.put("stations", stations);
-        metro.put("lines", lineSet);
+        /*metro.put("stations", stations);
+        metro.put("lines", lineSet);*/
+        metro.put("connections", connects);
 
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(DATA_FILE), metro);
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(DATA_FILE), metro);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        print();
+        //printStations();
+        printConnections();
     }
 
-
-    public static void print() throws ParseException {
+    public static void printStations() throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject jsonData = (JSONObject) parser.parse(getJsonFile());
         JSONObject stationsObject = (JSONObject) jsonData.get("stations");
@@ -71,6 +85,17 @@ for (String name : names){
         stationsObject.keySet().forEach(lineNumberObject -> {
             JSONArray stationsArray = (JSONArray) stationsObject.get(lineNumberObject);
             System.out.println("Номер линиии " + lineNumberObject + " - колличество станций : " + stationsArray.size());
+        });
+    }
+
+    public static void printConnections() throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonData = (JSONObject) parser.parse(getJsonFile());
+        JSONObject connectionsObject = (JSONObject) jsonData.get("connections");
+
+        connectionsObject.keySet().forEach(connectionsConnectionsObject -> {
+            JSONArray stationsArray = (JSONArray) connectionsObject.get(connectionsConnectionsObject);
+            System.out.println("колличество переходов : " + stationsArray.size());
         });
     }
 

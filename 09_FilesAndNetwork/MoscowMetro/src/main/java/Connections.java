@@ -8,6 +8,5 @@ import java.util.List;
 public class Connections {
     private String name;
     private String number;
-    private int connectionsCount;
-    private List<String> connections;
+    private String connections;
 }
