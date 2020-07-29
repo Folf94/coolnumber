@@ -8,9 +8,9 @@ public class Main {
         Connection connection = DriverManager.getConnection(url, user, pass);
         Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT name,COUNT((subscriptions.subscription_date))/" +
-                    "(TIMESTAMPDIFF(MONTH,min(subscriptions.subscription_date),max(subscriptions.subscription_date)))" +
-                    " " +
+            ResultSet resultSet = statement.executeQuery("SELECT name,COUNT(subscriptions.subscription_date)/" +
+                    "(PERIOD_DIFF(201809,201801))" +
+                    "" +
                     "as avgMonth FROM courses  JOIN subscriptions " +
                     " " +
                     "ON courses.id = subscriptions.course_id GROUP" +
