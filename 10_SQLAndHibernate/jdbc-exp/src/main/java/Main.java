@@ -9,7 +9,7 @@ public class Main {
         Statement statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery("SELECT name,COUNT(subscriptions.subscription_date)/" +
-                    "(PERIOD_DIFF(201809,201801))" +
+                    "(SELECT TIMEDIFF(MAX(MONTH(subscription_date)),MIN(MONTH(subscription_date)))FROM subscriptions)" +
                     "" +
                     "as avgMonth FROM courses  JOIN subscriptions " +
                     " " +
