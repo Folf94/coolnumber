@@ -4,12 +4,13 @@ import java.util.Date;
 @Entity
 @Table(name = "Subscriptions")
 public class Subscription {
+    @EmbeddedId
+    private Key id;
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", updatable = false, insertable = false)
     private Student student;
-
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", updatable = false, insertable = false)
     private Course course;
 
     @Column(name = "subscription_date")
@@ -37,5 +38,13 @@ public class Subscription {
 
     public void setSubscriptionDate(Date subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
+    }
+
+    public Key getId() {
+        return id;
+    }
+
+    public void setId(Key id) {
+        this.id = id;
     }
 }

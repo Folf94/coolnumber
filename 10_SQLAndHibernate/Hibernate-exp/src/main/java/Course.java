@@ -27,7 +27,6 @@ public class Course {
     private int studentsCount;
 
     private int price;
-
     @Column(name = "price_per_hour")
     private float pricePerHour;
 

@@ -1,0 +1,2 @@
+public class LinkedPurchaseList {
+}
