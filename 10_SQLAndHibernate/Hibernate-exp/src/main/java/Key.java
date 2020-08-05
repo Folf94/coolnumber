@@ -28,7 +28,6 @@ public class Key implements Serializable {
         return studentId == that.studentId &&
                 courseId == that.courseId;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(studentId, courseId);

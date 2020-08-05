@@ -6,9 +6,11 @@ import java.util.Date;
 public class Subscription {
     @EmbeddedId
     private Key id;
+
     @ManyToOne
     @JoinColumn(name = "student_id", updatable = false, insertable = false)
     private Student student;
+
     @ManyToOne
     @JoinColumn(name = "course_id", updatable = false, insertable = false)
     private Course course;

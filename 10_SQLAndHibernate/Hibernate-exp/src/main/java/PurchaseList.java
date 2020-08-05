@@ -11,6 +11,7 @@ public class PurchaseList {
 
     @Column(name = "course_name")
     private String courseName;
+
     @Column(name = "price")
     private int price;
 
