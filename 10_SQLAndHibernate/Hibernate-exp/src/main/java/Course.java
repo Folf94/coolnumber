@@ -1,12 +1,13 @@
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Courses")
+@Table(name = "courses")
 @Data
 public class Course {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -19,8 +20,9 @@ public class Course {
 
     private String description;
 
-    @Column(name = "teacher_id")
-    private int teacherId;
+    @ManyToOne(cascade = CascadeType.ALL)
+   // @Column(name = "teacher_id")
+    private Teacher teacher;
 
     @Column(name = "students_count")
     private int studentsCount;

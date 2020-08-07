@@ -4,6 +4,10 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
 
 public class Main {
     public static StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
@@ -12,8 +16,26 @@ public class Main {
 
     public static void main(String[] args) {
         Session session = sessionFactory.openSession();
-        Course course = session.get(Course.class, 1);
-        System.out.println(course.getName() +" кол-во студентов: " + course.getStudentsCount());
+        List<PurchaseList> purchaseList = session.createQuery("from purchaselist")
+                .getResultList();
+        for (PurchaseList purchaseList1 : purchaseList) {
+
+            DetachedCriteria studentsCriteria = DetachedCriteria.forClass(Student.class)
+                    .add(Restrictions.eq("name", purchaseList1.getStudentName()));
+            Student student = (Student) studentsCriteria.getExecutableCriteria(session).list().stream()
+                    .findFirst().get();
+
+            DetachedCriteria coursesCriteria = DetachedCriteria.forClass(Course.class)
+                    .add(Restrictions.eq("name", purchaseList1.getCourseName()));
+            Course course = (Course) coursesCriteria.getExecutableCriteria(session).list().stream()
+                    .findFirst().get();
+
+            LinkedPurchaseList linkedPurchaseList = new LinkedPurchaseList(
+                    new LinkedPurchaseList.Key(student.getId(), course.getId()), student, course,
+                    course.getPrice(), purchaseList1.getSubscriptionDate());
+            session.save(linkedPurchaseList);
         sessionFactory.close();
+        registry.close();
     }
+}
 }

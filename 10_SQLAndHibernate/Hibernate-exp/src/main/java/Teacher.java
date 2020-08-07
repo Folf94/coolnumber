@@ -1,4 +1,5 @@
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,7 +18,8 @@ public class Teacher {
 
     private int age;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacher")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Course> courses;
 
 }
