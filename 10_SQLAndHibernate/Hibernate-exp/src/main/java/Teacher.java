@@ -18,8 +18,7 @@ public class Teacher {
 
     private int age;
 
-    @OneToMany(mappedBy = "teacher")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<Course> courses;
 
 }
