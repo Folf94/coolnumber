@@ -1,5 +1,6 @@
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -15,7 +16,9 @@ public class Main {
     public static SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
 
     public static void main(String[] args) {
+
         Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
         List<PurchaseList> purchaseList = session.createQuery("from PurchaseList")
                 .getResultList();
         for (PurchaseList purchaseList1 : purchaseList) {
@@ -33,8 +36,10 @@ public class Main {
                     new LinkedPurchaseList.Key(student.getId(), course.getId()), student, course,
                     course.getPrice(), purchaseList1.getSubscriptionDate());
             session.save(linkedPurchaseList);
-            sessionFactory.close();
-            registry.close();
+
     }
+        transaction.commit();
+        sessionFactory.close();
+        registry.close();
 }
 }

@@ -4,8 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Linked_purchase_list")
-//@Data
+@Table(name = "linked_purchase_list")
 public class LinkedPurchaseList {
     public LinkedPurchaseList(Key id, Student student, Course course, int price, Date subscriptionDate) {
         this.id = id;
