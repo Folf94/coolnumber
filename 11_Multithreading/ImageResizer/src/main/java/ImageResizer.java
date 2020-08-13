@@ -2,16 +2,16 @@ import org.imgscalr.Scalr;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Queue;
+
 
 public class ImageResizer extends Thread {
 
-    private Queue<File> files;
+    private File[] files;
     private int newWidth;
     private String dstFolder;
     private Long start;
 
-    public ImageResizer(Queue<File> files, int newWidth, String dstFolder, Long start) {
+    public ImageResizer(File[] files, int newWidth, String dstFolder, Long start) {
         this.files = files;
         this.newWidth = newWidth;
         this.dstFolder = dstFolder;
@@ -34,9 +34,7 @@ public class ImageResizer extends Thread {
                 }
 
                 int newHeight = (int) Math.round(image.getHeight() / (image.getWidth() / (double) newWidth));
-                /*BufferedImage newImage = new BufferedImage(
-                        newWidth, newHeight, BufferedImage.TYPE_INT_RGB
-                );*/
+
                 BufferedImage scal = Scalr.resize(image, newWidth, newHeight, Scalr.OP_ANTIALIAS);
 
                 int widthStep = image.getWidth() / newWidth;
@@ -48,8 +46,9 @@ public class ImageResizer extends Thread {
                         scal.setRGB(x, y, rgb);
                     }
                 }
+                String readerNames[] = ImageIO.getReaderFormatNames();
                 File newFile = new File(dstFolder + "/" + file.getName());
-                ImageIO.write(scal, "jpg", newFile);
+                ImageIO.write(scal, String.valueOf(readerNames), newFile);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
