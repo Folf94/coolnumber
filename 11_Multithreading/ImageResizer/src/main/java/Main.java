@@ -7,28 +7,20 @@ public class Main
     private static final int processorCoreCount = Runtime.getRuntime().availableProcessors();
     private static long start = System.currentTimeMillis();
     private static int newWidth = 300;
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         String srcFolder = "D:/1";
         String dstFolder = "D:/2";
 
         File srcDir = new File(srcFolder);
         File[] files = srcDir.listFiles();
 
-        int step = Objects.requireNonNull(files).length / processorCoreCount;
+        double step = Objects.requireNonNull(files).length / processorCoreCount;
+        double result = Math.ceil(step);
 
-        int digit = 0;
-        File[] files1 = new File[step];
 
-        for (File file : files) {
-            files1[digit++] = file;
-            if (digit == step) {
-                new ImageResizer(files1,newWidth,dstFolder,start).start();
-                files1 = new File[step];
-                digit = 0;
-            }
-        }
-
+         for (double i = 0.0; i <= result; i++){
+             new ImageResizer(files,newWidth,dstFolder,start).start();
+         }
         System.out.println("Duration: " + (System.currentTimeMillis() - start));
-    }
+     }
 }
