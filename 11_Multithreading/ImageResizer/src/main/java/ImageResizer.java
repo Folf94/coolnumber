@@ -1,31 +1,30 @@
 import org.imgscalr.Scalr;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 
 public class ImageResizer extends Thread {
 
-    private File[] files;
-    private int newWidth;
+    private List<File> files;
+    private int newWidth = 300;
     private String dstFolder;
     private Long start;
 
-    public ImageResizer(File[] files, int newWidth, String dstFolder, Long start) {
+    public ImageResizer(List<File> files, String dstFolder, Long start) {
         this.files = files;
-        this.newWidth = newWidth;
         this.dstFolder = dstFolder;
         this.start = start;
     }
 
     @Override
     public void run() {
-    bufferedImageScal();
+        bufferedImageScal();
     }
 
-    public void bufferedImageScal()
-
-    {
+    public void bufferedImageScal() {
         try {
             for (File file : files) {
                 BufferedImage image = ImageIO.read(file);
@@ -35,17 +34,8 @@ public class ImageResizer extends Thread {
 
                 int newHeight = (int) Math.round(image.getHeight() / (image.getWidth() / (double) newWidth));
 
-                BufferedImage scal = Scalr.resize(image, newWidth, newHeight, Scalr.OP_ANTIALIAS);
+                BufferedImage scal = Scalr.resize(image, Scalr.Mode.AUTOMATIC, newWidth, newHeight);
 
-                int widthStep = image.getWidth() / newWidth;
-                int heightStep = image.getHeight() / newHeight;
-
-                for (int x = 0; x < newWidth; x++) {
-                    for (int y = 0; y < newHeight; y++) {
-                        int rgb = image.getRGB(x * widthStep, y * heightStep);
-                        scal.setRGB(x, y, rgb);
-                    }
-                }
                 String readerNames[] = ImageIO.getReaderFormatNames();
                 File newFile = new File(dstFolder + "/" + file.getName());
                 ImageIO.write(scal, String.valueOf(readerNames), newFile);

@@ -1,12 +1,13 @@
 import java.io.File;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class Main
-{
-    private static final int processorCoreCount = Runtime.getRuntime().availableProcessors();
+public class Main {
+    private static final int PROCESSOR_CORE_COUNT = Runtime.getRuntime().availableProcessors();
     private static long start = System.currentTimeMillis();
-    private static int newWidth = 300;
+    //private static int newWidth = 300;
+
     public static void main(String[] args) {
         String srcFolder = "D:/1";
         String dstFolder = "D:/2";
@@ -14,13 +15,20 @@ public class Main
         File srcDir = new File(srcFolder);
         File[] files = srcDir.listFiles();
 
-        double step = Objects.requireNonNull(files).length / processorCoreCount;
-        double result = Math.ceil(step);
+        List<List<File>> newFiles = new ArrayList<>();
 
+        for (int i = 0; i < Math.min(PROCESSOR_CORE_COUNT, files.length); i++) {
+            newFiles.add(new ArrayList<>());
+        }
+        for (int i = 0; i < files.length; i++) {
+            newFiles.get(i % PROCESSOR_CORE_COUNT).add(files[i]);
+        }
 
-         for (double i = 0.0; i <= result; i++){
-             new ImageResizer(files,newWidth,dstFolder,start).start();
-         }
+        for (int i = 0; i < Math.min(PROCESSOR_CORE_COUNT, files.length); i++) {
+            ImageResizer resizer = new ImageResizer(newFiles.get(i), dstFolder, start);
+            resizer.start();
+        }
+
         System.out.println("Duration: " + (System.currentTimeMillis() - start));
-     }
+    }
 }
