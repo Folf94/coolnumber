@@ -28,6 +28,9 @@ public class Bank {
     public void transfer(int fromAccountNum, int toAccountNum, long amount) throws InterruptedException {
         Account fromAccount = accounts.get(fromAccountNum);
         Account toAccount = accounts.get(toAccountNum);
+        if (fromAccount.isBlocked() || toAccount.isBlocked()) {
+            return;
+        }
         transaction(amount, fromAccount, toAccount);
         if (amount > 50000) {
             if (isFraud(fromAccountNum, toAccountNum, amount)) {
