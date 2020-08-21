@@ -32,9 +32,26 @@ public class Bank {
      */
     public void transfer(Account fromAccount, Account toAccount, long amount) throws InterruptedException {
         int fromId = fromAccount.getId();
-        int toId = fromAccount.getId();
+        int toId = toAccount.getId();
         if (fromAccount.isBlocked() || toAccount.isBlocked()) {
             return;
+        }
+        if (amount > 50000) {
+            if (isFraud(fromId, toId, amount)) {
+                if (fromId < toId) {
+                    synchronized (fromAccount) {
+                        synchronized (toAccount) {
+                            transaction(fromAccount, toAccount, amount);
+                        }
+                    }
+                } else {
+                    synchronized (toAccount) {
+                        synchronized (fromAccount) {
+                            transaction(fromAccount, toAccount, amount);
+                        }
+                    }
+                }
+            }
         }
         else
             if (fromId < toId) {

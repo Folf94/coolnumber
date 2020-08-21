@@ -1,10 +1,9 @@
-public class Account
-{
+public class Account {
     private long moneyAcc;
     private int accNumber;
     private boolean isBlocked = false;
 
-    public Account(int accNumber,long money) {
+    public Account(int accNumber, long money) {
         this.accNumber = accNumber;
         this.moneyAcc = money;
     }
@@ -30,8 +29,8 @@ public class Account
     }
 
     @Override
-    public String toString(){
-        return String.valueOf(accNumber +" "+ moneyAcc);
+    public String toString() {
+        return String.valueOf(accNumber + " " + moneyAcc);
     }
 
     public synchronized void putMoney(long money) {

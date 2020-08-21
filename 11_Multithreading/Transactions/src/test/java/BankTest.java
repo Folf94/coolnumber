@@ -1,4 +1,3 @@
-
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class BankTest extends TestCase {
     private Account five = new Account(5, 50000);
     private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
 
- @Override
+    @Override
     public void setUp() {
         accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), one);
         accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), two);
@@ -27,7 +26,7 @@ public class BankTest extends TestCase {
 
 
     public void testTransferOneThread() throws InterruptedException {
-       bank.transfer(one,two,1000);
+        bank.transfer(one, two, 1000);
         long actualFrom = one.getBalance();
         long expectedFrom = 49000;
         long actualTo = two.getBalance();

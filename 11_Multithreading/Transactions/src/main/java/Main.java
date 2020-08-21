@@ -1,6 +1,3 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class Main {
     private static final int MAGIC_NUM = 10;
 
