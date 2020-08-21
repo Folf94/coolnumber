@@ -1,5 +1,3 @@
-import lombok.Data;
-
 public class Account
 {
     private long moneyAcc;
@@ -31,6 +29,11 @@ public class Account
         return false;
     }
 
+    @Override
+    public String toString(){
+        return String.valueOf(accNumber +" "+ moneyAcc);
+    }
+
     public synchronized void putMoney(long money) {
         moneyAcc += money;
     }
@@ -39,11 +42,11 @@ public class Account
         isBlocked = true;
     }
 
-    public int getAccNumber() {
+    public int getId() {
         return accNumber;
     }
 
-    public void setAccNumber(int accNumber) {
+    public void setId(int accNumber) {
         this.accNumber = accNumber;
     }
 }

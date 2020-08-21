@@ -1,21 +1,26 @@
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bank {
-    private HashMap<Integer, Account> accounts;
+    private Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
     private final Random random = new Random();
+    private long balance;
+    private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
 
-    public void setAccounts(HashMap<Integer, Account> accounts) {
-        this.accounts = accounts;
-    }
-
-    {
-        accounts = createAccounts();
-    }
 
     public synchronized boolean isFraud(int fromAccountNum, int toAccountNum, long amount) throws InterruptedException {
         Thread.sleep(1000);
         return random.nextBoolean();
+    }
+
+    public void printAccounts(){
+        for (Map.Entry entry : accounts.entrySet())
+        {
+            System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue().toString());
+        }
     }
 
     /**
@@ -25,25 +30,35 @@ public class Bank {
      * метод isFraud. Если возвращается true, то делается блокировка
      * счетов (как – на ваше усмотрение)
      */
-    public void transfer(int fromAccountNum, int toAccountNum, long amount) throws InterruptedException {
-        Account fromAccount = accounts.get(fromAccountNum);
-        Account toAccount = accounts.get(toAccountNum);
+    public void transfer(Account fromAccount, Account toAccount, long amount) throws InterruptedException {
+        int fromId = fromAccount.getId();
+        int toId = fromAccount.getId();
         if (fromAccount.isBlocked() || toAccount.isBlocked()) {
             return;
         }
-        transaction(amount, fromAccount, toAccount);
-        if (amount > 50000) {
-            if (isFraud(fromAccountNum, toAccountNum, amount)) {
-                transaction(amount, fromAccount, toAccount);
-                fromAccount.blockAccount();
-                toAccount.blockAccount();
+        else
+            if (fromId < toId) {
+                synchronized (fromAccount) {
+                    synchronized (toAccount) {
+                        transaction(fromAccount, toAccount, amount);
+                    }
+                }
+            } else {
+                synchronized (toAccount) {
+                    synchronized (fromAccount) {
+                        transaction(fromAccount, toAccount, amount);
+                    }
+                }
             }
         }
-    }
 
-    private void transaction(long amount, Account fromAccount, Account toAccount) {
-        fromAccount.getMoney(amount);
-        toAccount.putMoney(amount);
+    public void transaction(Account fromAccount, Account toAccount, long amount) {
+        if (fromAccount.getBalance() > amount) {
+            fromAccount.getMoney(amount);
+            toAccount.putMoney(amount);
+        }
+        else
+            System.out.println("Not enough money");
     }
 
     /**
@@ -54,13 +69,17 @@ public class Bank {
         return account.getBalance();
     }
 
-    private static HashMap<Integer, Account> createAccounts() {
-        HashMap<Integer, Account> accountMap = new HashMap<>();
-        for (int i = 1; i <= 10; i++) {
-            long accountMoney = (long) (50000 + 30000 * Math.random());
-            Account account = new Account(i, accountMoney);
-            accountMap.put(i, account);
-        }
-        return accountMap;
+    public void addAccounts(long amount){
+        balance+=amount;
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(),new Account(CLIENT_ID_HOLDER.get(),amount));
+    }
+
+    public long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
     }
 }
+

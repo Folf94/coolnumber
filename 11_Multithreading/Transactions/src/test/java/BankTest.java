@@ -1,6 +1,8 @@
+
 import junit.framework.TestCase;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BankTest extends TestCase {
 
@@ -11,19 +13,21 @@ public class BankTest extends TestCase {
     private Account three = new Account(3, 50000);
     private Account four = new Account(4, 50000);
     private Account five = new Account(5, 50000);
+    private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
 
-    @Override
+ @Override
     public void setUp() {
-        accounts.put(1, one);
-        accounts.put(2, two);
-        accounts.put(3, three);
-        accounts.put(4, four);
-        accounts.put(5, five);
-        bank.setAccounts(accounts);
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), one);
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), two);
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), three);
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), four);
+        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), five);
+
     }
 
+
     public void testTransferOneThread() throws InterruptedException {
-        bank.transfer(1, 2, 1000);
+       bank.transfer(one,two,1000);
         long actualFrom = one.getBalance();
         long expectedFrom = 49000;
         long actualTo = two.getBalance();
@@ -35,8 +39,8 @@ public class BankTest extends TestCase {
     public void testTransferBlock() throws InterruptedException {
         long balance = one.getBalance();
         one.setIsBlocked(true);
-        bank.transfer(1, 2, 1000);
-        long actualOne = bank.getBalance(1);
+        bank.transfer(one, two, 1000);
+        long actualOne = one.getBalance();
         assertEquals(balance, actualOne);
     }
 
@@ -44,12 +48,12 @@ public class BankTest extends TestCase {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 try {
-                    bank.transfer(1, 2, 1000);
-                    bank.transfer(1, 3, 2000);
-                    bank.transfer(2, 1, 2000);
-                    bank.transfer(2, 3, 2000);
-                    bank.transfer(3, 1, 1000);
-                    bank.transfer(3, 2, 1000);
+                    bank.transfer(one, two, 1000);
+                    bank.transfer(one, three, 2000);
+                    bank.transfer(two, one, 2000);
+                    bank.transfer(two, three, 2000);
+                    bank.transfer(three, one, 1000);
+                    bank.transfer(three, two, 1000);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -70,3 +74,4 @@ public class BankTest extends TestCase {
 
     }
 }
+

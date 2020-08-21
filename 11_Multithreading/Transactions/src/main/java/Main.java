@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Bank bank = new Bank();
-        long start = System.currentTimeMillis();
+        /*long start = System.currentTimeMillis();
         ExecutorService service = Executors.newFixedThreadPool(MAGIC_NUM);
 
         for (int i = 0; i < MAGIC_NUM; i++) {
@@ -20,7 +20,16 @@ public class Main {
                     e.printStackTrace();
                 }
             });
-        }
+        }*/
+
+        bank.addAccounts(50000);
+        bank.addAccounts(1000);
+        bank.addAccounts(2000);
+        bank.addAccounts(3000);
+        bank.addAccounts(4000);
+        bank.printAccounts();
+
+
     }
 }
 
