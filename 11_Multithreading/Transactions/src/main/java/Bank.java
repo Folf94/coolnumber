@@ -5,10 +5,10 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bank {
-    private Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
     private final Random random = new Random();
     private long balance;
-    private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
+    private  AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
 
 
     public synchronized boolean isFraud(int fromAccountNum, int toAccountNum, long amount) throws InterruptedException {
@@ -30,44 +30,29 @@ public class Bank {
      * метод isFraud. Если возвращается true, то делается блокировка
      * счетов (как – на ваше усмотрение)
      */
-    public void transfer(Account fromAccount, Account toAccount, long amount) throws InterruptedException {
-        int fromId = fromAccount.getId();
-        int toId = toAccount.getId();
+    public void transfer(int fromId, int toId, long amount) throws InterruptedException {
+       Account fromAccount = accounts.get(fromId);
+       Account toAccount = accounts.get(toId);
+       if (fromId == toId){
+           return;
+       }
         if (fromAccount.isBlocked() || toAccount.isBlocked()) {
             return;
         }
-        if (amount > 50000) {
-            if (isFraud(fromId, toId, amount)) {
-                if (fromId < toId) {
-                    synchronized (fromAccount) {
-                        synchronized (toAccount) {
-                            transaction(fromAccount, toAccount, amount);
-                        }
-                    }
-                } else {
-                    synchronized (toAccount) {
-                        synchronized (fromAccount) {
-                            transaction(fromAccount, toAccount, amount);
-                        }
+        int c = Integer.compare(fromId, toId);
+        synchronized (c > 0 ? fromAccount : toAccount) {
+            synchronized (c > 0 ? toAccount : fromAccount) {
+                if (amount > 50000) {
+                    if (isFraud(fromId, toId, amount)) {
+                        fromAccount.blockAccount();
+                        toAccount.blockAccount();
+                        return;
                     }
                 }
+                transaction(fromAccount, toAccount, amount);
             }
         }
-        else
-            if (fromId < toId) {
-                synchronized (fromAccount) {
-                    synchronized (toAccount) {
-                        transaction(fromAccount, toAccount, amount);
-                    }
-                }
-            } else {
-                synchronized (toAccount) {
-                    synchronized (fromAccount) {
-                        transaction(fromAccount, toAccount, amount);
-                    }
-                }
-            }
-        }
+    }
 
     public void transaction(Account fromAccount, Account toAccount, long amount) {
         if (fromAccount.getBalance() > amount) {
@@ -88,11 +73,12 @@ public class Bank {
 
     public void addAccounts(long amount){
         balance+=amount;
-        accounts.put(CLIENT_ID_HOLDER.incrementAndGet(),new Account(CLIENT_ID_HOLDER.get(),amount));
+        int id = CLIENT_ID_HOLDER.incrementAndGet();
+        accounts.put(id, new Account(id, amount));
     }
 
     public long getBalance() {
-        return balance;
+        return accounts.values().stream().mapToLong(Account::getBalance).sum();
     }
 
     public void setBalance(long balance) {

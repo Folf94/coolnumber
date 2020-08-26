@@ -20,12 +20,9 @@ public class Account {
         return isBlocked;
     }
 
-    public synchronized boolean getMoney(long money) {
-        if (moneyAcc >= money) {
+    public synchronized void getMoney(long money) {
             moneyAcc -= money;
-            return true;
-        }
-        return false;
+
     }
 
     @Override
