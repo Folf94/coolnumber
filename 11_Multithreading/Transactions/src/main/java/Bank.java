@@ -59,8 +59,9 @@ public class Bank {
             fromAccount.getMoney(amount);
             toAccount.putMoney(amount);
         }
-        else
+        else {
             System.out.println("Not enough money");
+        }
     }
 
     /**
@@ -71,10 +72,11 @@ public class Bank {
         return account.getBalance();
     }
 
-    public void addAccounts(long amount){
+    public int addAccounts(long amount){
         balance+=amount;
         int id = CLIENT_ID_HOLDER.incrementAndGet();
         accounts.put(id, new Account(id, amount));
+        return id;
     }
 
     public long getBalance() {

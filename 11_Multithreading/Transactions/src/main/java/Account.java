@@ -22,7 +22,6 @@ public class Account {
 
     public synchronized void getMoney(long money) {
             moneyAcc -= money;
-
     }
 
     @Override
