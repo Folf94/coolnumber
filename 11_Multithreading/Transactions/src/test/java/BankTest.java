@@ -21,19 +21,19 @@ public class BankTest extends TestCase {
         accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), three);
         accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), four);
         accounts.put(CLIENT_ID_HOLDER.incrementAndGet(), five);
-bank.addAccounts(one.getBalance());
-bank.addAccounts(two.getBalance());
-bank.addAccounts(three.getBalance());
-bank.addAccounts(four.getBalance());
-bank.addAccounts(five.getBalance());
+        bank.addAccounts(one.getBalance());
+        bank.addAccounts(two.getBalance());
+        bank.addAccounts(three.getBalance());
+        bank.addAccounts(four.getBalance());
+        bank.addAccounts(five.getBalance());
     }
 
 
     public void testTransferOneThread() throws InterruptedException {
         bank.transfer(one.getId(), two.getId(), 1000);
-        long actualFrom = one.getBalance();
+        long actualFrom = bank.getBalance(1);
         long expectedFrom = 49000;
-        long actualTo = two.getBalance();
+        long actualTo = bank.getBalance(2);
         long expectedTo = 51000;
         assertEquals(expectedFrom, actualFrom);
         assertEquals(expectedTo, actualTo);
@@ -64,11 +64,11 @@ bank.addAccounts(five.getBalance());
             }).start();
         }
         Thread.sleep(1000);
-        long actualOne = one.getBalance();
+        long actualOne = bank.getBalance(1);
         long expectedOne = 50000;
-        long actualTwo = two.getBalance();
+        long actualTwo = bank.getBalance(2);
         long expectedTwo = 30000;
-        long actualThree = three.getBalance();
+        long actualThree = bank.getBalance(3);
         long expectedThree = 70000;
 
         assertEquals(expectedOne, actualOne);
@@ -76,6 +76,7 @@ bank.addAccounts(five.getBalance());
         assertEquals(expectedThree, actualThree);
 
     }
+
     public void testCheckRaceCondition() {
         double beforeMoney = bank.getBalance();
         for (int i = 0; i < 1000; i++) {
