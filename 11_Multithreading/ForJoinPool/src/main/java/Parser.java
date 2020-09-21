@@ -1,77 +1,70 @@
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.RecursiveTask;
 
-public class Parser extends RecursiveTask<String> {
+import static java.util.stream.Collectors.toList;
+
+public class Parser extends RecursiveTask<ConcurrentSkipListSet<String>> {
     @Getter
     @Setter
     private String url;
     private static String startUrl;
-    //private ConcurrentSkipListSet<String> links = new ConcurrentSkipListSet<>();
-    private CopyOnWriteArraySet<String> links = new CopyOnWriteArraySet<>();
+    private ConcurrentSkipListSet<String> links;
 
-    public Parser(String url) {
-        this.url = url.trim();
-    }
-
-    public Parser(String url, String startUrl) {
-        this.url = url.trim();
-        Parser.startUrl = startUrl.trim();
+    public Parser(String url, String startUrl, ConcurrentSkipListSet<String> links) {
+        this.url = url;
+        this.startUrl = startUrl;
+        this.links = links;
 
     }
 
-    @SneakyThrows
     @Override
-    protected String compute() {
-        StringBuffer stringBuffer = new StringBuffer(url + "\n");
-        Set<Parser> subTask = new HashSet<>();
-        getChildren(subTask);
-        for (Parser link : subTask) {
-            stringBuffer.append(link.join());
-        }
-        return stringBuffer.toString();
-    }
-
-    private void getChildren(Set<Parser> subTask) {
-        Document doc;
-        Elements elements;
-
+    public ConcurrentSkipListSet<String> compute() {
         try {
             Thread.sleep(150);
-            doc = Jsoup.connect(url).get();
-            elements = doc.select("a");
-            for (Element element : elements) {
-                String attr = element.attr("abs:href");
-                if (attr.isEmpty()) {
-                    continue;
-                }
-                URL u1 = new URL(url.replace("www.", ""));
-                URL u2 = new URL(attr.replace("www.", ""));
-                if (!attr.contains("#") && !attr.contains(".xls")&& !attr.contains("(") && !attr.contains("?") && !attr.contains(
-                        ".pdf") && u1.getHost().equals(u2.getHost())) {
-                    Parser parser = new Parser(attr);
-                    parser.fork();
-                    subTask.add(parser);
-                    links.add(attr);
-                }
-            }
-        } catch (IOException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        List<String> linksArray = getChildren(url);
+        List<Parser> tasks = new ArrayList<>();
+
+        for (String curUrl : linksArray) {
+            if (links.contains(curUrl))
+                continue;
+            links.add(curUrl);
+            Parser parser = new Parser(curUrl, url, links);
+            tasks.add(parser);
+            parser.fork();
+        }
+        tasks.forEach(Parser::join);
+        return links;
+    }
+
+    private List<String> getChildren(String url) {
+        try {
+            Document doc = Jsoup.parse(Jsoup.connect(url).get().toString());
+            Elements map = doc.select("a[href]");
+            return map.stream().map(element -> element.attr("href")).filter(mapSite -> !mapSite.isEmpty() && !mapSite.contains("#") && !mapSite.contains("?") && !mapSite.contains(".pdf") && (mapSite.startsWith("/") || mapSite.startsWith(startUrl)) && !mapSite.equals("/")).map(link -> getFullLink(link, startUrl)).collect(toList());
+        } catch (HttpStatusException | UnsupportedMimeTypeException e) {
+            return new ArrayList<>();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    private String getFullLink(String link, String startUrl) {
+        return link.startsWith(startUrl) ? link : startUrl + link;
     }
 }
 
