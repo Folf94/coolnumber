@@ -9,6 +9,6 @@ import java.util.Date;
 public class DataController {
     @RequestMapping("/")
     public String date() {
-        return (new Date()).toString();
+        return (new Date()).toString() + " " + Math.random()*10;
     }
 }
