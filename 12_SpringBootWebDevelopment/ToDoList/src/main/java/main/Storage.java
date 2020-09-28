@@ -2,18 +2,20 @@ package main;
 
 import response.Affair;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Storage {
-    private static HashMap<Integer, Affair> affairs = new HashMap<>();
-    private static int currentId = 1;
+    private static Map<Integer, Affair> affairs = Collections.synchronizedMap(new HashMap<>());
+    private static AtomicInteger currentId = new AtomicInteger(0);
 
     public static int addAffair(Affair affair) {
-        int id = currentId;
+        int id = currentId.incrementAndGet();
         affair.setId(id);
         affairs.put(id, affair);
-        currentId++;
         return id;
     }
 
@@ -23,14 +25,14 @@ public class Storage {
         }
     }
 
-    public static Affair getAffairById(Affair id) {
+    public static Affair getAffairById(Integer id) {
         if (affairs.containsKey(id)) {
             return affairs.get(id);
         }
         return null;
     }
 
-    public static void deleteAffairById(Affair id) {
+    public static void deleteAffairById(Integer id) {
         if (affairs.containsKey(id)) {
             affairs.remove(id);
         } else {
@@ -43,19 +45,22 @@ public class Storage {
     }
 
 
-    public static boolean updateAffairById(Affair affair, int id) {
+    public static boolean updateAffairById(Affair affair, Integer id) {
         if (affairs.containsKey(id)) {
             affairs.put(id, affair);
             return true;
         }
         return false;
     }
-    /*public static boolean updateAffairs(Affair affair) {
-        if (affairs.contains(affair)) {
-            affair.setName(affair.toString());
-            return true;
-        }
-        return false;
-    }*/
+
+    public static boolean updateAffairs(List<Affair> affairList) {
+        affairList.forEach(affair -> {
+            if (affairs.containsKey(affair.getId())) {
+                affairs.put(affair.getId(), affair);
+            }
+        });
+
+        return true;
+    }
 }
 
