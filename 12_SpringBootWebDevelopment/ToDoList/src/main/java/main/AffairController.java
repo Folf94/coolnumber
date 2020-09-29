@@ -3,7 +3,7 @@ package main;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import response.Affair;
+import model.Affair;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class AffairController {
     public void affairList() {
         Storage.getAllAffair();
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.GET)
+    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.GET)
     public Affair affairById(Integer id) {
         return Storage.getAffairById(id);
     }
@@ -22,10 +22,10 @@ public class AffairController {
         return Storage.addAffair(affair);
     }
     @RequestMapping(value = "/affairs/", method = RequestMethod.PUT)
-    public void affairUpdateByIds(List<Affair> affairs) {
+    public void affairUpdate(List<Affair> affairs) {
         Storage.updateAffairs(affairs);
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.PUT)
     public void affairUpdateById(Affair affair, Integer id) {
       Storage.updateAffairById(affair, id);
     }
@@ -33,7 +33,7 @@ public class AffairController {
     public void deleteAffairs(){
         Storage.deleteAllAffair();
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.DELETE)
     public void deleteAffairById(Integer id){
         Storage.deleteAffairById(id);
     }
