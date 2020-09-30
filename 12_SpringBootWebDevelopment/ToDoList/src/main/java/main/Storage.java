@@ -1,6 +1,6 @@
 package main;
 
-import model.Affair;
+import main.model.Affair;
 
 import java.util.Collections;
 import java.util.HashMap;

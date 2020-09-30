@@ -1,41 +1,67 @@
 package main;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import model.Affair;
+import main.model.Affair;
+import main.model.AffairRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AffairController {
-    @RequestMapping(value = "/affairs/", method = RequestMethod.GET)
-    public void affairList() {
-        Storage.getAllAffair();
+    @Autowired
+    private AffairRepository affairRepository;
+
+    @GetMapping(value = "/affairs/")
+    public List<Affair> affairList() {
+        Iterable<Affair> affairIterable = affairRepository.findAll();
+        ArrayList<Affair> affairArrayList = new ArrayList<>();
+        for (Affair affairs : affairIterable){
+            affairArrayList.add(affairs);
+        }
+        return affairArrayList;
     }
-    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.GET)
-    public Affair affairById(Integer id) {
-        return Storage.getAffairById(id);
+
+    @GetMapping(value = "/affairs/{id}")
+    public ResponseEntity affairById(Integer id) {
+        Optional<Affair> optionalAffair = affairRepository.findById(id);
+        if (optionalAffair.isPresent()){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return new ResponseEntity(optionalAffair.get(), HttpStatus.OK);
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.POST)
-    public int addCase(Affair affair) {
-        return Storage.addAffair(affair);
+
+    @PostMapping(value = "/affairs/")
+        public int addAffair(Affair affair) {
+        Affair newAffair = affairRepository.save(affair);
+        return newAffair.getId();
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.PUT)
+
+    @PutMapping(value = "/affairs/")
     public void affairUpdate(List<Affair> affairs) {
-        Storage.updateAffairs(affairs);
+        Iterable<Affair> affairIterable = affairRepository.findAll();
+        affairRepository.saveAll(affairIterable);
     }
-    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.PUT)
+
+    @PutMapping(value = "/affairs/{id}")
     public void affairUpdateById(Affair affair, Integer id) {
-      Storage.updateAffairById(affair, id);
+       if (affairRepository.existsById(id)){
+           Affair newAffair = affairRepository.save(affair);
+       }
     }
-    @RequestMapping(value = "/affairs/", method = RequestMethod.DELETE)
-    public void deleteAffairs(){
-        Storage.deleteAllAffair();
+
+    @DeleteMapping(value = "/affairs/")
+    public void deleteAffairs() {
+        affairRepository.deleteAll();
     }
-    @RequestMapping(value = "/affairs/{id}", method = RequestMethod.DELETE)
-    public void deleteAffairById(Integer id){
-        Storage.deleteAffairById(id);
+
+    @DeleteMapping(value = "/affairs/{id}")
+    public void deleteAffairById(Integer id) {
+        affairRepository.deleteById(id);
     }
 }
 
