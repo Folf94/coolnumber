@@ -20,7 +20,7 @@ public class Main {
             executorService.submit(new Loader(i));
         }
         executorService.shutdown();
-        System.out.println((System.currentTimeMillis() - startTime) + " ms");
+        System.out.println((System.currentTimeMillis() - startTime) + " ms\n");
     }
 }
 
