@@ -13,7 +13,7 @@ public class Loader implements Runnable {
 
     @Override
     public void run() {
-        Path targetPath = Paths.get("res/numbersRegion" + regionCode + ".txt");
+        Path targetPath = Paths.get("res/numbersRegion.txt");
 
         char[] letters = {'У', 'К', 'Е', 'Н', 'Х', 'В', 'А', 'Р', 'О', 'С', 'М', 'Т'};
 
@@ -35,12 +35,12 @@ public class Loader implements Runnable {
         }
     }
 
-    private static String padNumber(int number, int numberLength) {
+    private static StringBuilder padNumber(int number, int numberLength) {
         StringBuilder numberStr = new StringBuilder(Integer.toString(number));
         int padSize = numberLength - numberStr.length();
         for (int i = 0; i < padSize; i++) {
             numberStr.insert(0, '0');
         }
-        return numberStr.toString();
+        return numberStr;
     }
 }
