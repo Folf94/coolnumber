@@ -73,9 +73,9 @@ public class Loader {
 
             String name = attributes.getNamedItem("name").getNodeValue();
             Date birthDay = birthDayFormat.parse(attributes.getNamedItem("birthDay").getNodeValue());
-            //String stringBirthDay = attributes.getNamedItem("birthDay").getNodeValue();
+            String stringBirthDay = attributes.getNamedItem("birthDay").getNodeValue();
 
-            Voter voter = new Voter(name, birthDay);
+            Voter voter = new Voter(name, stringBirthDay);
             Integer count = voterCounts.get(voter);
             voterCounts.put(voter, count == null ? 1 : count + 1);
         }

@@ -22,10 +22,12 @@ public class XMLHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        String dateString = null;
         try {
             if (qName.equals("voter") && voter == null) {
                 Date birthDay = birthDayFormat.parse(attributes.getValue("birthDay"));
-                voter = new Voter(attributes.getValue("name"), birthDay);
+                dateString = birthDayFormat.format(birthDay);
+                voter = new Voter(attributes.getValue("name"), dateString);
             } else if (qName.equals("visit") && voter != null) {
                 int count = voterCounts.getOrDefault(voter, (byte) 0);
                 voterCounts.put(voter, (byte) (count + 1));
