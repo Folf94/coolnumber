@@ -1,15 +1,40 @@
+import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
-public class FileAccess
-{
+public class FileAccess {
+    public Configuration getConfiguration() {
+        Configuration configuration = new Configuration();
+        configuration.set("dfs.client.use.datanode.hostname", "true");
+        System.setProperty("HADOOP_USER_NAME", "root");
+        return configuration;
+    }
+
+
     /**
      * Initializes the class, using rootPath as "/" directory
      *
      * @param rootPath - the path to the root of HDFS,
-     * for example, hdfs://localhost:32771
+     *                 for example, hdfs://localhost:32771
      */
-    public FileAccess(String rootPath)
-    {
+    public FileAccess(String rootPath) {
+        try {
+            FileSystem hdfs = FileSystem.get(new URI(rootPath), getConfiguration());
+            hdfs.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -18,9 +43,12 @@ public class FileAccess
      *
      * @param path
      */
-    public void create(String path)
-    {
-
+    public void create(String path) throws URISyntaxException, IOException {
+        FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
+        Path file = new Path(path);
+        OutputStream os = hdfs.create(file);
+        os.flush();
+        os.close();
     }
 
     /**
@@ -29,9 +57,21 @@ public class FileAccess
      * @param path
      * @param content
      */
-    public void append(String path, String content)
-    {
+    public void append(String path, String content) {
+        try {
+            FileSystem hdfs = FileSystem.get(new URI(path), getConfiguration());
+            Path file = new Path(content);
+            if (!hdfs.exists(file)) {
+                hdfs.createNewFile(file);
+            }
 
+            FSDataOutputStream fileOutputStream = hdfs.append(file);
+            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+            br.append("Content: " + content + "\n");
+            br.close();
+        } catch (URISyntaxException | IOException uriSyntaxException) {
+            uriSyntaxException.printStackTrace();
+        }
     }
 
     /**
@@ -40,10 +80,15 @@ public class FileAccess
      * @param path
      * @return
      */
-    public String read(String path)
-    {
+    public String read(String path) throws URISyntaxException, IOException {
 
-        return null;
+            FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
+            Path file = new Path(path);
+            FSDataInputStream inputStream = hdfs.open(file);
+            String out = IOUtils.toString(inputStream, "UTF-8");
+        inputStream.close();
+        hdfs.close();
+        return out;
     }
 
     /**
@@ -51,9 +96,12 @@ public class FileAccess
      *
      * @param path
      */
-    public void delete(String path)
-    {
-
+    public void delete(String path) throws URISyntaxException, IOException {
+        FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
+        Path file = new Path(path);
+        if (hdfs.exists(file)) {
+            hdfs.delete(file, true);
+        }
     }
 
     /**
@@ -62,9 +110,9 @@ public class FileAccess
      * @param path
      * @return
      */
-    public boolean isDirectory(String path)
-    {
-        return false;
+    public boolean isDirectory(String path) {
+
+        return Files.isDirectory(java.nio.file.Path.of(path));
     }
 
     /**
@@ -73,8 +121,59 @@ public class FileAccess
      * @param path
      * @return
      */
-    public List<String> list(String path)
-    {
-        return null;
+    public List<String> list(String path) {
+        List<String> filePaths = new ArrayList<String>();
+        FileSystem fs = null;
+        Boolean recursive = true;
+        try {
+            Path file = new Path(path);
+            fs = file.getFileSystem(getConfiguration());
+            file = fs.resolvePath(file);
+
+            if (recursive) {
+                Queue<Path> fileQueue = new LinkedList<Path>();
+                fileQueue.add(file);
+
+                while (!fileQueue.isEmpty()) {
+                    Path filePath = fileQueue.remove();
+                    if (fs.isFile(filePath)) {
+                        filePaths.add(filePath.toString());
+                    } else {
+
+                        FileStatus[] fileStatuses = fs.listStatus(filePath);
+                        for (FileStatus fileStatus : fileStatuses) {
+                            fileQueue.add(fileStatus.getPath());
+                        }
+                    }
+
+                }
+
+            } else {
+                if (fs.isDirectory(file)) {
+                    FileStatus[] fileStatuses = fs.listStatus(file);
+
+                    for (FileStatus fileStatus : fileStatuses) {
+                        if (fileStatus.isFile())
+                            filePaths.add(fileStatus.getPath().toString());
+                    }
+                } else {
+
+                    filePaths.add(file.toString());
+                }
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            try {
+                if (fs != null)
+                    fs.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return filePaths;
+        }
     }
 }
