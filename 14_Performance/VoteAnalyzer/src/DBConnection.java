@@ -6,7 +6,7 @@ public class DBConnection
 
     private static String dbName = "learn";
     private static String dbUser = "root";
-    private static String dbPass = "ya78yrc8n4w3984";
+    private static String dbPass = "1234";
 
     public static Connection getConnection()
     {
@@ -15,7 +15,7 @@ public class DBConnection
             try {
                 connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + dbName +
-                    "?user=" + dbUser + "&password=" + dbPass);
+                    "?user=" + dbUser + "&password=" + dbPass + "&serverTimezone=UTC");
                 connection.createStatement().execute("DROP TABLE IF EXISTS voter_count");
                 connection.createStatement().execute("CREATE TABLE voter_count(" +
                         "id INT NOT NULL AUTO_INCREMENT, " +
@@ -29,8 +29,15 @@ public class DBConnection
         }
         return connection;
     }
+    public static void executeMultiInsert(StringBuilder insertQuery) throws SQLException {
 
-    public static void countVoter(String name, String birthDay) throws SQLException
+        String sql = "INSERT INTO voter_count(name, birthDate, count)" +
+                " VALUES" + insertQuery.toString();
+
+        DBConnection.getConnection().createStatement().execute(sql);
+
+    }
+    /*public static void countVoter(String name, String birthDay) throws SQLException
     {
         birthDay = birthDay.replace('.', '-');
         String sql = "SELECT id FROM voter_count WHERE birthDate='" + birthDay + "' AND name='" + name + "'";
@@ -47,7 +54,7 @@ public class DBConnection
                     .execute("UPDATE voter_count SET `count`=`count`+1 WHERE id=" + id);
         }
         rs.close();
-    }
+    }*/
 
     public static void printVoterCounts() throws SQLException
     {
