@@ -1,9 +1,10 @@
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,10 +46,19 @@ public class FileAccess {
      */
     public void create(String path) throws URISyntaxException, IOException {
         FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
-        Path file = new Path(path);
-        OutputStream os = hdfs.create(file);
-        os.flush();
-        os.close();
+        File file = new File(path);
+        Path path1 = new Path(String.valueOf(file));
+        if (file.isDirectory()) {
+            file.mkdir();
+            if (file.mkdir()) {
+                System.out.println("Directory is created");
+            } else {
+                System.out.println("Directory cannot be created");
+            }
+        }
+        else {
+            hdfs.createNewFile(path1);
+        }
     }
 
     /**
@@ -82,10 +92,10 @@ public class FileAccess {
      */
     public String read(String path) throws URISyntaxException, IOException {
 
-            FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
-            Path file = new Path(path);
-            FSDataInputStream inputStream = hdfs.open(file);
-            String out = IOUtils.toString(inputStream, "UTF-8");
+        FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
+        Path file = new Path(path);
+        FSDataInputStream inputStream = hdfs.open(file);
+        String out = IOUtils.toString(inputStream, "UTF-8");
         inputStream.close();
         hdfs.close();
         return out;
