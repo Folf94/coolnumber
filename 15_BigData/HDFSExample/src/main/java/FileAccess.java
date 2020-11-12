@@ -46,20 +46,19 @@ public class FileAccess {
      */
     public void create(String path) throws URISyntaxException, IOException {
         FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
-        File file = new File(path);
-        Path path1 = new Path(String.valueOf(file));
-        if (file.isDirectory()) {
-            file.mkdir();
-            if (file.mkdir()) {
-                System.out.println("Directory is created");
-            } else {
-                System.out.println("Directory cannot be created");
-            }
+        Path file = new Path(path);
+        if (hdfs.exists(file)) {
+            System.out.println("Dir " + path + " already not exists");
+            return;
         }
         else {
-            hdfs.createNewFile(path1);
+            hdfs.createNewFile(file);
         }
+        hdfs.mkdirs(file);
+        hdfs.close();
+
     }
+
 
     /**
      * Appends content to the file
