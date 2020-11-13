@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Queue;
 
 public class FileAccess {
+    private String rootPath;
+
     public Configuration getConfiguration() {
         Configuration configuration = new Configuration();
         configuration.set("dfs.client.use.datanode.hostname", "true");
@@ -30,6 +32,7 @@ public class FileAccess {
      *                 for example, hdfs://localhost:32771
      */
     public FileAccess(String rootPath) {
+        this.rootPath = rootPath;
         try {
             FileSystem hdfs = FileSystem.get(new URI(rootPath), getConfiguration());
             hdfs.close();
@@ -45,18 +48,12 @@ public class FileAccess {
      * @param path
      */
     public void create(String path) throws URISyntaxException, IOException {
-        FileSystem hdfs = FileSystem.get(new URI("hdfs://HOST_NAME:8020"), getConfiguration());
-        Path file = new Path(path);
+        FileSystem hdfs = FileSystem.get(new URI(rootPath), getConfiguration());
+        Path file = new Path(rootPath + "/" + path);
         if (hdfs.exists(file)) {
-            System.out.println("Dir " + path + " already not exists");
-            return;
+            hdfs.createNewFile(new Path(rootPath + "/" + path));
         }
-        else {
-            hdfs.createNewFile(file);
-        }
-        hdfs.mkdirs(file);
-        hdfs.close();
-
+        else System.out.println("File " + path + " does not exists");
     }
 
 
