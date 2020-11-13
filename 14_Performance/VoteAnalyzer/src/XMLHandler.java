@@ -1,78 +1,63 @@
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+
 
 public class XMLHandler extends DefaultHandler {
-
-    StringBuilder insertQuery;
-    private HashMap<Voter, Byte> voterCounts;
-    private Voter voter;
+    private  Voter voter;
     private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    int maxSize = 4_000_000;
-    int number = 0;
-    public XMLHandler() {
-        voterCounts = new HashMap<>();
-    }
-
-
+    private int countVoters = 0;
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        String dateString = null;
-        try {
-            if (qName.equals("voter") && voter == null && number < maxSize) {
-                Date birthDay = birthDayFormat.parse(attributes.getValue("birthDay"));
-                dateString = birthDayFormat.format(birthDay);
-                voter = new Voter(attributes.getValue("name"), dateString);
 
-            } else if (qName.equals("visit") && voter != null) {
-                int count = voterCounts.getOrDefault(voter, (byte) 0);
-                voterCounts.put(voter, (byte) (count + 1));
+        if (qName.equals("voter")){
+            Date birthday = null;
+            try {
+                birthday = birthDayFormat.parse(attributes.getValue("birthDay"));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } catch (ParseException ex) {
-            ex.printStackTrace();
+            voter = new Voter(attributes.getValue("name"), birthDayFormat.format(birthday));
+
+        }
+        else if (qName.equals("visit") && voter != null)
+        {
+            try {
+                DBConnection.preparedStatement.setString(1,  voter.getName());
+                DBConnection.preparedStatement.setString(2,  voter.getBirthDay());
+                DBConnection.preparedStatement.addBatch();
+                countVoters++;
+
+                if (countVoters > 10000) {
+                    DBConnection.preparedStatement.executeBatch();
+                    DBConnection.connection.commit();
+                    countVoters = 0;
+                }
+
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
 
     }
 
-
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equals("voter")) {
+    public void endElement(String uri, String localName, String qName) throws SAXException
+    {
+        if(qName.equals("voter"))
+        {
             voter = null;
         }
     }
 
-    public void printDuplicatedVoters() {
+    public void printDublicatedVoiters() throws SQLException {
 
-        System.out.println("Duplicated voters");
-        for (Voter voter : voterCounts.keySet()) {
-            int count = voterCounts.get(voter);
-            if (count > 1) {
-                System.out.println(voter.toString() + " - " + count);
-            }
-        }
-    }
-
-    public void writeToDb() {
-
-        try {
-            insertQuery = new StringBuilder();
-            for (Voter voter : voterCounts.keySet()) {
-
-                String name = voter.getName();
-                String birthDate = voter.getBirthDay();
-                int count = voterCounts.get(voter);
-                insertQuery.append(insertQuery.length() == 0 ? "" : ",").append("('").append(name).append("','").append(birthDate).append("',").append(count).append(")");
-            }
-            DBConnection.executeMultiInsert(insertQuery);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        DBConnection.preparedStatement.executeBatch();
+        DBConnection.connection.commit();
+        DBConnection.printVoterCounts();
     }
 }
