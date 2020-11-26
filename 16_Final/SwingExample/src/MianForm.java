@@ -11,6 +11,7 @@ public class MianForm {
     private JTextField name;
     private JTextField surname;
     private JTextField middleName;
+    private String TITLE_message = "Ошибка";
 
     public JPanel getMainPanel() {
         return mainPanel;
@@ -62,7 +63,8 @@ public class MianForm {
                             collapseButton.setLabel("Collapse");
 
                         } else if (nameText.isEmpty() && surnameText.isEmpty()) {
-                            JOptionPane.showMessageDialog(mainPanel, "Exception, please write your Name and Surname!");
+                            JOptionPane.showMessageDialog( mainPanel,"Exception, please write your Name and Surname!", TITLE_message,
+                                    JOptionPane.ERROR_MESSAGE);
 
                         }
                         break;
@@ -72,12 +74,11 @@ public class MianForm {
                         JOptionPane.showMessageDialog(mainPanel, nameText + " " + surnameText + " " + middleNameText);
                         collapseButton.setLabel("Expand");
                     } else if (nameText.isEmpty() && surnameText.isEmpty()) {
-                        JOptionPane.showMessageDialog(mainPanel, "Exception, please write your Name and Surname!");
+                        JOptionPane.showMessageDialog( mainPanel,"Exception, please write your Name and Surname!", TITLE_message,
+                                JOptionPane.ERROR_MESSAGE);
                     }
                     break;
-
                 }
-
             }
         });
 
