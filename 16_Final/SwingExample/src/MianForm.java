@@ -11,14 +11,19 @@ public class MianForm {
     private JTextField name;
     private JTextField surname;
     private JTextField middleName;
+    private JTextField textField1;
+    private JLabel label;
     private String TITLE_message = "Ошибка";
 
     public JPanel getMainPanel() {
+        label.setVisible(false);
+        textField1.setVisible(false);
         return mainPanel;
     }
 
     public MianForm() {
         collapseButton.addActionListener(new Action() {
+
             @Override
             public Object getValue(String key) {
                 return null;
@@ -55,36 +60,36 @@ public class MianForm {
                 String nameText = name.getText();
                 String surnameText = surname.getText();
                 String middleNameText = middleName.getText();
-                for (; ; ) {
-                    if (collapseButton.getLabel().equals("Expand")) {
-                        if (!nameText.isEmpty() && !surnameText.isEmpty()) {
-                            JOptionPane.showMessageDialog(mainPanel,
-                                    nameText + " " + surnameText + " " + middleNameText);
-                            collapseButton.setLabel("Collapse");
+                String fullName = nameText + " " + surnameText + " " + " " + middleNameText;
+                    if (collapseButton.getLabel().equals("Collapse")) {
+                        if (nameText.isEmpty() && surnameText.isEmpty()) {
+                            JOptionPane.showMessageDialog(mainPanel, "Exception, please write your Name and Surname!", TITLE_message, JOptionPane.ERROR_MESSAGE);
 
-                        } else if (nameText.isEmpty() && surnameText.isEmpty()) {
-                            JOptionPane.showMessageDialog( mainPanel,"Exception, please write your Name and Surname!", TITLE_message,
-                                    JOptionPane.ERROR_MESSAGE);
-
+                        } else {
+                            nameTextPane.setVisible(false);
+                            surnameTextPane.setVisible(false);
+                            middleNameTextPane.setVisible(false);
+                            name.setVisible(false);
+                            surname.setVisible(false);
+                            middleName.setVisible(false);
+                            collapseButton.setLabel("Expand");
+                            label.setVisible(true);
+                            textField1.setVisible(true);
+                            textField1.setText(fullName);
                         }
-                        break;
+                    } else {
+                        label.setVisible(false);
+                        textField1.setVisible(false);
+                        nameTextPane.setVisible(true);
+                        surnameTextPane.setVisible(true);
+                        middleNameTextPane.setVisible(true);
+                        name.setVisible(true);
+                        surname.setVisible(true);
+                        middleName.setVisible(true);
+                        collapseButton.setLabel("Collapse");
                     }
-
-                    if (!nameText.isEmpty() && !surnameText.isEmpty()) {
-                        JOptionPane.showMessageDialog(mainPanel, nameText + " " + surnameText + " " + middleNameText);
-                        collapseButton.setLabel("Expand");
-                    } else if (nameText.isEmpty() && surnameText.isEmpty()) {
-                        JOptionPane.showMessageDialog( mainPanel,"Exception, please write your Name and Surname!", TITLE_message,
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
                 }
-            }
+
         });
-
-    }
-
-    private void createUIComponents() {
-
     }
 }
