@@ -17,7 +17,7 @@ public class CaptchaCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotNull
     private LocalDateTime time;
